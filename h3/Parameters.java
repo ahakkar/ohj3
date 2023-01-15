@@ -20,6 +20,7 @@ public class Parameters {
         int col1_width = 0;
         int i = 1;
 
+        // determine column 2 width
         for (var param : args) {
             if (param.length() > col1_width) {
                 col1_width = param.length();

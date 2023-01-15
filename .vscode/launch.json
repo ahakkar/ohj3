@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Currencies",
+            "request": "launch",
+            "mainClass": "h3.Currencies",
+            "projectName": "ohj3_2b407f7e"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -23,8 +30,7 @@
             "request": "launch",
             "mainClass": "h3.Median",
             "projectName": "ohj3_2b407f7e",
-            // "args": "58.03125 62.5 75.03125 25.03125 -39.9375 7 -38.75"
-            "args" : "-37.5 -37.875 -87.9375 -41.5 100.125 53.0625 48.03125 -48"
+            "args": "-37.5 -37.875 -87.9375 -41.5 100.125 53.0625 48.03125 -48"
         },
         {
             "type": "java",
