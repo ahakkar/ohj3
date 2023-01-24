@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Sudoku",
+            "request": "launch",
+            "mainClass": "Sudoku.Sudoku",
+            "projectName": "ohj3_2b407f7e"
+        },
+        {
+            "type": "java",
+            "name": "Launch Sudoku",
+            "request": "launch",
+            "mainClass": "h4.Sudoku.Sudoku",
+            "projectName": "ohj3_2b407f7e"
+        },
+        {
+            "type": "java",
             "name": "Launch Currencies",
             "request": "launch",
             "mainClass": "h3.Currencies",
