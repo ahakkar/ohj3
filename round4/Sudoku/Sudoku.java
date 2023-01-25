@@ -47,7 +47,7 @@ Jäsenfunktio print(): tulostaa Sudoku-ruudukon. Ruudukon rajat esitetään merk
 Katso tarkempi muoto tehtävän yhteydessä annetusta esimerkkitulosteesta.
 */
 
-package h4.Sudoku;
+package round4.Sudoku;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,14 +55,14 @@ import java.util.Collections;
 
 public class Sudoku {
 
-    private static Integer SIZE = 9;
-    private static Integer BLOCK_WIDTH = 3;
-    private static Integer BLOCK_HEIGHT = 3;
-    private static Integer PADDING = 10;
-    private static String EMPTY_CELL = "   ";
-    private static String ROW_DIVIDER_1 = "#---+---+---#---+---+---#---+---+---#";
-    private static String ROW_DIVIDER_2 = "#".repeat(SIZE * BLOCK_WIDTH + PADDING);
-    private static ArrayList<String> CELL_COORDS = new ArrayList<String>(
+    private static final Integer SIZE = 9;
+    private static final Integer BLOCK_WIDTH = 3;
+    private static final Integer BLOCK_HEIGHT = 3;
+    private static final Integer PADDING = 10;
+    private static final String EMPTY_CELL = "   ";
+    private static final String ROW_DIVIDER_1 = "#---+---+---#---+---+---#---+---+---#";
+    private static final String ROW_DIVIDER_2 = "#".repeat(SIZE * BLOCK_WIDTH + PADDING);
+    private static final ArrayList<String> CELL_COORDS = new ArrayList<String>(
         Arrays.asList("0, 0", "0, 3", "0, 6", "3, 0", "3, 3", "3, 6", "6, 0", "6, 3", "6, 6")
         );
 
@@ -89,7 +89,7 @@ public class Sudoku {
             if (c == (char) ' ') {
                 data.set(i*SIZE + j, 0);
             } else {
-                data.set(i*SIZE + j, c - '0'); // convert char to int
+                data.set(i*SIZE + j, Character.getNumericValue(c));
             }
         } 
     }
