@@ -6,7 +6,8 @@ import java.io.IOException;
 
 public class SudokuTest {
   public static void main(String[] args) throws IOException {
-    try(var file = new BufferedReader(new FileReader(args[0]))) {
+    try(var file = new BufferedReader(
+        new FileReader("D:\\GDrive\\study\\TUNI2022\\ohj3\\h4\\Sudoku\\input.txt"))) {
       String sudokuStr;
       while((sudokuStr = file.readLine()) != null) {
         Sudoku s = new Sudoku();

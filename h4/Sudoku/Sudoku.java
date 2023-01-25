@@ -50,56 +50,152 @@ Katso tarkempi muoto tehtävän yhteydessä annetusta esimerkkitulosteesta.
 package h4.Sudoku;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Sudoku {
 
-    Integer ROWS = 9;
-    Integer COLS = 9;
-    Integer CELL_WIDTH = 3;
-    Integer CELL_HEIGHT = 3;
-    Integer PADDING = 10;
-    String EMPTY_CELL = "   ";
-    String ROW_DIVIDER_1 = "#---+---+---#---+---+---#---+---+---#";
-    String ROW_DIVIDER_2 = "#".repeat(COLS * CELL_WIDTH + PADDING);
+    private static Integer SIZE = 9;
+    private static Integer BLOCK_WIDTH = 3;
+    private static Integer BLOCK_HEIGHT = 3;
+    private static Integer PADDING = 10;
+    private static String EMPTY_CELL = "   ";
+    private static String ROW_DIVIDER_1 = "#---+---+---#---+---+---#---+---+---#";
+    private static String ROW_DIVIDER_2 = "#".repeat(SIZE * BLOCK_WIDTH + PADDING);
+    private static ArrayList<String> CELL_COORDS = new ArrayList<String>(
+        Arrays.asList("0, 0", "0, 3", "0, 6", "3, 0", "3, 3", "3, 6", "6, 0", "6, 3", "6, 6")
+        );
 
-    ArrayList<Integer> data;
+    private ArrayList<Integer> data;
 
     /*
      * constructor: create a new list to store sudoku values
      */
     public Sudoku() {
-        data = new ArrayList<Integer>(Collections.nCopies(ROWS*COLS, 0));  
+        data = new ArrayList<Integer>(Collections.nCopies(SIZE*SIZE, 0));  
     }
 
     public void set(int i, int j, char c) {
-        if ((0 <= i && i < ROWS) && (0 <= j && j < COLS)) {
-            System.out.println("jees");
-        } else {
-            System.out.printf("Trying to access illegal cell (%s, %s)!\n", i, j);
+        if (i < 0 || i >= SIZE || j < 0 || j >= SIZE) {
+            System.out.printf(
+                "Trying to access illegal cell (%s, %s)!\n", i, j
+                );
         }
-
+        else if (c != ' ' && (c < '1' || c > '9')) {
+            System.out.printf(
+                "Trying to set illegal character %s to (%d, %d)!\n", c, i, j
+                );
+        } else {
+            if (c == (char) ' ') {
+                data.set(i*SIZE + j, 0);
+            } else {
+                data.set(i*SIZE + j, c - '0'); // convert char to int
+            }
+        } 
     }
 
-    public boolean check() {
-        boolean result = true;
+    /*
+    * create sublist, sort asc, if next number != i+1, return false
+    */
+    private boolean check_list(String type, int num)
+    {    
+        boolean error = false;
+        ArrayList<Integer> digits = new ArrayList<Integer>();
 
-        return result;
+        // populate digits list depending on the type
+        switch (type) {
+            case "row":
+                digits = new ArrayList<Integer>(data.subList(num*SIZE, num*SIZE+9));
+                break;
+            case "col":    
+                for (int j = 0 ; j < SIZE; j++) {
+                    digits.add(data.get(j*SIZE + num));
+                }
+                break;
+            case "block":  
+                for(int row = 0; row < BLOCK_HEIGHT; row++) {
+                    for(int col = 0; col < BLOCK_WIDTH; col++) {
+                        digits.add(data.get((row + (num / 3) * 3) * SIZE + col + (num % 3) * 3));
+                    }
+                }
+                break;
+            default:
+                System.out.println("Invalid command.");
+                return false;
+        }
+
+        // sort the digits list to ascending order
+        Collections.sort(digits);
+
+        // check through the list if there are any duplicates
+        int i = 0;
+        while (i < SIZE-1) {
+            if ((digits.get(i) != 0)) {
+                if (digits.get(i) == digits.get(i+1)) {
+                    error = true;
+                    break;
+                }
+            }
+            i++;
+        }  
+
+        // in case of dupicates, print the error message and the location
+        if (error) {
+            switch (type) {
+                case "row":
+                    System.out.printf("Row %d has multiple %d's!\n", num, digits.get(i));
+                    break;
+                case "col":
+                    System.out.printf("Column %d has multiple %d's!\n", num, digits.get(i));
+                    break;
+                case "block":  
+                    System.out.printf("Block at (%s) has multiple %d's!\n", CELL_COORDS.get(num), digits.get(i));   
+                    break;
+    
+                default:
+                    System.out.println("Invalid command.");
+                    break;
+            }
+            return false;
+        }
+        return true;
+    }  
+
+    // these must be checked in this absurd order, type by type
+    public boolean check() {        
+        for (int i = 0; i < SIZE; i++) {
+            if (!check_list("row", i)) {
+                return false;
+            }
+        }        
+        for (int i = 0; i < SIZE; i++) {
+            if (!check_list("col", i)) {
+                return false;
+            }
+        }        
+        for (int i = 0; i < SIZE; i++) {
+            if (!check_list("block", i)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void print_row_divider(Character type) {
         if (type.equals('|')) {
             System.out.println(ROW_DIVIDER_1);
-        } else {
-            System.out.println(ROW_DIVIDER_2);
-        }
+            return;
+        } 
+        System.out.println(ROW_DIVIDER_2);
+        
     }
 
     private void print_col_divider(int i) {
         if (i == 2 || i == 5) {
-            print_row_divider('#');
+            print_row_divider('#');            
         }
-        else if (i < ROWS-1) {
+        else if (i < SIZE-1) {
             print_row_divider('|');
         }
     }
@@ -107,43 +203,32 @@ public class Sudoku {
     private void print_row(int i) {
         System.out.print("#");
 
-        for (int j = 0; j < COLS; j++)
+        for (int j = 0; j < SIZE; j++)
         {     
             // print data           
-            if(data.get(i*COLS + j).equals(0)) {
+            if(data.get(i*SIZE + j).equals(0)) {
                 System.out.print(EMPTY_CELL);
             } else {
-                System.out.printf("%" + CELL_WIDTH + "d", data.get(i*COLS + j));
+                System.out.printf(" %d ", data.get(i*SIZE + j));
             }  
             // print dividers 
             if (j == 2 || j ==  5 ) {
                 System.out.print("#");
             } 
-            else if (j < COLS-1) {
+            else if (j < SIZE-1) {
                 System.out.print("|");
-            }
-                               
+            }                               
         }
-        System.out.println("#");
-        
+        System.out.println("#");        
         print_col_divider(i);
     }
 
     public void print()
     {
         print_row_divider('#');
-
-        for (int i = 0; i < ROWS; i++) {
+        for (int i = 0; i < SIZE; i++) {
             print_row(i);
         }
-
         print_row_divider('#');
-    }
-    public static void main(String args[])
-    {
-        Sudoku su = new Sudoku();
-        su.print();
-        su.set(5,4, '3');
-        su.set(-3, 25, '5');
     }
 }

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch SudokuTest",
+            "request": "launch",
+            "mainClass": "h4.Sudoku.SudokuTest",
+            "projectName": "ohj3_2b407f7e"
+        },
+        {
+            "type": "java",
             "name": "Launch Sudoku",
             "request": "launch",
             "mainClass": "Sudoku.Sudoku",
