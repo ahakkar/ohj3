@@ -74,15 +74,13 @@ public class StudentRegister {
                 search.sort(
                     (o1, o2) -> 
                     find_course_name(o1.getCourseCode())
-                    .compareTo(find_course_name(o2.getCourseCode()))
-                );
+                    .compareTo(find_course_name(o2.getCourseCode())) );
                 break;
             case "by code":
                 search.sort(
                     (o1, o2) ->
                     o1.getCourseCode()
-                    .compareTo(o2.getCourseCode())
-                );
+                    .compareTo(o2.getCourseCode()) );
                 break;
             case "null":
                 break;
