@@ -6,8 +6,6 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
-package round4.studentregister;
-
 public class Attainment {
 
     private String courseCode;

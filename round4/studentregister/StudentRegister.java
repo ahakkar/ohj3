@@ -6,8 +6,6 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
-package round4.studentregister;
-
 import java.util.ArrayList;
 
 public class StudentRegister {
