@@ -1,4 +1,4 @@
-package round4.StudentRegister;
+package round4.studentregister;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

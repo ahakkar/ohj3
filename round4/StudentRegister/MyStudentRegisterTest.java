@@ -1,4 +1,4 @@
-package round4.StudentRegister;
+package round4.studentregister;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

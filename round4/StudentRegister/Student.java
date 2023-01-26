@@ -6,7 +6,7 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
-package round4.StudentRegister;
+package round4.studentregister;
 
 public class Student {
 
