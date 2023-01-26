@@ -17,23 +17,25 @@ import java.util.ArrayList;
 public class Standings {      
 
     private ArrayList<Team> teams = new ArrayList<Team>();
+    private int longest_name = 0;
 
     public class Team {
 
-        String name;
-        int wins;
-        int ties;
-        int losses;
-        int scored;
-        int allowed;
-        int points;
+        public String name;
+        public int wins;
+        public int ties;
+        public int losses;
+        public int scored;
+        public int allowed;
+        public int points;
+        public int games;
 
         private Team(String n) {
             name = n;
         }
 
         public String getName() {
-            return "";
+            return name;
         }
     
         public int getWins() {
@@ -68,24 +70,108 @@ public class Standings {
         readMatchData(filename);
     }
 
+    private Team find_team(String name) {
+        return teams.stream().filter(team -> name.equals(team.getName())).findFirst().orElse(null);
+    }
+
     public void addMatchResult(String teamNameA,
                                 int goalsA,
                                 int goalsB,
                                 String teamNameB
     ){
-        System.out.printf("%s %d-%d %s\n", teamNameA, goalsA, goalsB, teamNameB);
+        // System.out.printf("%s %d-%d %s\n", teamNameA, goalsA, goalsB, teamNameB);
+
+        // voitosta 3 pistettä, tasapelistä 1 pisteen ja häviöstä 0 pistettä
+        // find team a and b objects and modify them
+        // all this code below was generated with GitHub Copilot
+        Team teamA = find_team(teamNameA);
+        Team teamB = find_team(teamNameB);
+
+        if (teamA == null) {
+            teamA = new Team(teamNameA);
+            teams.add(teamA);
+            if (teamNameA.length() > longest_name) {
+                longest_name = teamNameA.length();
+            }
+        }
+        
+        if (teamB == null) {
+            teamB = new Team(teamNameB);
+            teams.add(teamB);
+            if (teamNameB.length() > longest_name) {
+                longest_name = teamNameB.length();
+            }
+        }
+
+        teamA.scored += goalsA;
+        teamA.allowed += goalsB;
+        teamB.scored += goalsB;
+        teamB.allowed += goalsA;
+        teamA.games++;
+        teamB.games++;
+        
+        if (goalsA > goalsB) {
+            teamA.wins++;
+            teamB.losses++;
+            teamA.points += 3;
+        }
+        else if (goalsA < goalsB) {
+            teamA.losses++;
+            teamB.wins++;
+            teamB.points += 3;
+        }
+        else {
+            teamA.ties++;
+            teamB.ties++;
+            teamA.points++;
+            teamB.points++;
+        }
     }
 
     public ArrayList<Team> getTeams() {
         return teams;
     }
 
-    public void printStandings() {
-
+    public void printStandings()
+    {        
+        System.out.println("Standings:");
+        System.out.print(String.format("%-" + longest_name + "s   ", "Team"));
+        System.out.println("Win Tie Lss Scr All Pts");
+        System.out.println("-------------------------------------------------");
+        teams.stream().sorted((a, b) -> {
+            if (a.points == b.points) {
+                if (a.wins == b.wins) {
+                    if (a.scored - a.allowed == b.scored - b.allowed) {
+                        return a.name.compareTo(b.name);
+                    }
+                    else {
+                        return b.scored - b.allowed - a.scored + a.allowed;
+                    }
+                }
+                else {
+                    return b.wins - a.wins;
+                }
+            }
+            else {
+                return b.points - a.points;
+            }
+        }).forEach(team -> {
+            System.out.print(String.format("%-" + longest_name + "s", team.name));
+            System.out.printf("%4d %3d %3d %3d %3d-%d %3d\n", 
+                                team.games,                                
+                                team.wins,
+                                team.ties, 
+                                team.losses,
+                                team.scored,
+                                team.allowed,
+                                team.points);
+            }
+        );
     }
 
     public void readMatchData(String filename) {
-        String fn = String.format("D:\\GDrive\\study\\TUNI2022\\ohj3\\round4\\Standings\\%s.txt", filename);
+        String fn = 
+            String.format("D:\\GDrive\\study\\TUNI2022\\ohj3\\round4\\Standings\\%s.txt", filename);
 
         try(var file = new BufferedReader(new FileReader(fn))) {
             String line;
