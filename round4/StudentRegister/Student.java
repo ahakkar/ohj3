@@ -13,11 +13,9 @@ public class Student {
     private String name;
     private String studentNumber;
 
-
     public Student(String n, String sn) {
         name = n;
         studentNumber = sn;
-
     }
 
     public String getName() {

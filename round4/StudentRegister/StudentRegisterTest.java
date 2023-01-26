@@ -6,9 +6,9 @@ import java.io.IOException;
 
 public class StudentRegisterTest {
   public static void main(String[] args) throws IOException {
-    String studentFN = args[0];
-    String courseFN = args[1];
-    String attFN = args[2];
+    String studentFN = "D:\\GDrive\\study\\TUNI2022\\ohj3\\round4\\StudentRegister\\students.txt";
+    String courseFN = "D:\\GDrive\\study\\TUNI2022\\ohj3\\round4\\StudentRegister\\courses.txt";
+    String attFN = "D:\\GDrive\\study\\TUNI2022\\ohj3\\round4\\StudentRegister\\attainments.txt";
     StudentRegister sr = new StudentRegister();
     try(var file = new BufferedReader(new FileReader(studentFN))) {
       String line;
@@ -17,10 +17,14 @@ public class StudentRegisterTest {
         sr.addStudent(new Student(numberName[1], numberName[0]));
       }
     }
+
+    
+
     System.out.println("All registered students:");
     for(Student st : sr.getStudents()) {
       System.out.println("  " + st.getName() + " " + st.getStudentNumber());
     }
+
 
     try(var file = new BufferedReader(new FileReader(courseFN))) {
       String line;
@@ -66,5 +70,6 @@ public class StudentRegisterTest {
       i = (i + 1) % 3;
     }
   }
+
 
 }

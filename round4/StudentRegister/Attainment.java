@@ -22,11 +22,12 @@ public class Attainment {
 
     public String getCourseCode() {
         return courseCode;
-
     }
+
     public String getStudentNumber() {
         return studentNumber;
     }
+    
     public int getGrade() {
         return grade;
     }
