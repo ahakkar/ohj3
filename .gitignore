@@ -27,7 +27,7 @@
 hs_err_pid*
 
 # some project files
-round4/StudentRegister/MyStudentRegisterTest.java
-round4/StudentRegister/StudentRegisterTest.java
-round4/StudentRegister/StudentRegisterTests.java
+round4/studentregister/MyStudentRegisterTest.java
+round4/studentregister/StudentRegisterTest.java
+round4/studentregister/StudentRegisterTests.java
 
