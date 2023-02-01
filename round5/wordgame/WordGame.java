@@ -23,7 +23,7 @@ public class WordGame {
         private int mistakeLimit;
         private int missingChars;
 
-        protected String getWord() {
+        public String getWord() {
             return guessed_word;
         }
 
@@ -31,14 +31,14 @@ public class WordGame {
             return original_word;
         }        
 
-        protected int getMistakes() {
+        public int getMistakes() {
             return mistakes;
         } 
-        protected int getMistakeLimit() {
+        public int getMistakeLimit() {
             return mistakeLimit;
         }
 
-        protected int getMissingChars() {
+        public int getMissingChars() {
             return missingChars;
         } 
 
