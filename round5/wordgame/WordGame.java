@@ -14,32 +14,27 @@ import java.util.Scanner;
 
 public class WordGame {
 
-    public static class WordGameState {
+    private static class WordGameState {
 
-        protected String original_word;
-        protected String guessed_word;
-        protected int mistakes;
-        protected int mistakeLimit;
-        protected int missingChars;
+        private String original_word;
+        private String guessed_word;
+        private int mistakes;
+        private int mistakeLimit;
+        private int missingChars;
 
-        public String getWord() {
+        private String getWord() {
             return guessed_word;
         }
-        public int getMistakes() {
+        private int getMistakes() {
             return mistakes;
         } 
-        public int getMistakeLimit() {
+        private int getMistakeLimit() {
             return mistakeLimit;
         }
 
-        public int getMissingChars() {
+        private int getMissingChars() {
             return missingChars;
-        }
-
-        public void add_mistake() {
-            this.mistakes++;
-        }
-  
+        }  
     }
 
     private ArrayList<String> words;
@@ -135,7 +130,7 @@ public class WordGame {
         }
         gameState.missingChars = count_missing;
         if(!correct_guess) {
-            gameState.add_mistake();
+            gameState.mistakes++;
         }       
         if (gameState.missingChars == 0 || gameState.mistakes > gameState.mistakeLimit) {
             WordGameState temp = gameState;
@@ -154,7 +149,7 @@ public class WordGame {
             gameState.missingChars = 0;
             gameState.guessed_word = gameState.original_word;
         } else {
-            gameState.add_mistake();
+            gameState.mistakes++;
         }
         if (gameState.missingChars == 0 || gameState.mistakes > gameState.mistakeLimit) {
             WordGameState temp = gameState;
@@ -162,12 +157,6 @@ public class WordGame {
             return temp;
         }
         return this.gameState;        
-    }  
-    
-    public static void main(String args[]) {
-        WordGame game = new WordGame("words.txt");
-        game.initGame(0, 5);
-        System.out.println(game.isGameActive());
-        game.initGame(400, 10);
-    }
+    } 
+
 }
