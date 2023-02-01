@@ -6,7 +6,6 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
-//package round5.wordgame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
