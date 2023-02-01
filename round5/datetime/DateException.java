@@ -6,6 +6,8 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
+ package round5.datetime;
+
 public class DateException extends Exception {
     public DateException(String message) {
         super(message);

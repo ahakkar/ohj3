@@ -6,6 +6,8 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
+ package round5.datetime;
+
 public class DateTime extends Date {
 
     private int hh;
