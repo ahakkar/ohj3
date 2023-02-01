@@ -162,6 +162,7 @@ public class WordGame {
         if (gameState.getMissingChars() == 0 ||
             gameState.getMistakes() > gameState.getMistakeLimit())
         {
+            gameState.setGuessedWord(gameState.getOriginalWord());
             WordGameState temp = gameState;
             gameState = null;
             return temp;
@@ -183,6 +184,7 @@ public class WordGame {
         if (gameState.getMissingChars() == 0 ||
             gameState.getMistakes() > gameState.getMistakeLimit())
         {
+            gameState.setGuessedWord(gameState.getOriginalWord());
             WordGameState temp = gameState;
             gameState = null;
             return temp;
