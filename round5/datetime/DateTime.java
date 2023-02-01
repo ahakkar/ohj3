@@ -8,9 +8,9 @@
 
 public class DateTime extends Date {
 
-    int hh;
-    int min;
-    int sec;
+    private int hh;
+    private int min;
+    private int sec;
 
     public DateTime(int day, int month, int year, int hh, int min, int sec) throws DateException {
         super (day, month, year);
