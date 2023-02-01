@@ -80,7 +80,7 @@ public class WordGame {
     */
     public WordGame(String wordFilename) {
         words = new ArrayList<String>();
-        File file = new File("D:\\GDrive\\study\\TUNI2022\\ohj3\\round5\\wordgame\\" + wordFilename);
+        File file = new File(wordFilename);
         try {
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()) {
