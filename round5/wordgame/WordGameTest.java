@@ -6,16 +6,14 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
-package round5.wordgame;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class WordGameTest {
     public static void main(String args[]) throws IOException {
-        String wordFilename = "D:\\GDrive\\study\\TUNI2022\\ohj3\\round5\\wordgame\\words.txt";
-        String cmdFilename = "D:\\GDrive\\study\\TUNI2022\\ohj3\\round5\\wordgame\\input1.txt";
+        String wordFilename = "words.txt";
+        String cmdFilename = "D:\\GDrive\\study\\TUNI2022\\ohj3\\round5\\wordgame\\input2.txt";
 
         WordGame game = new WordGame(wordFilename);
         try (var cmdFile = new BufferedReader(new FileReader(cmdFilename))) {
