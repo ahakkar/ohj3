@@ -5,6 +5,7 @@
  * Antti Hakkarainen / K79735
  * antti.i.hakkarainen@tuni.fi 
  */
+package round5.wordgame;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

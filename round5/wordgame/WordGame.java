@@ -6,6 +6,8 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
+//package round5.wordgame;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.Scanner;
 
 public class WordGame {
 
-    private static class WordGameState {
+    protected static class WordGameState {
 
         private String original_word;
         private String guessed_word;
@@ -22,19 +24,44 @@ public class WordGame {
         private int mistakeLimit;
         private int missingChars;
 
-        private String getWord() {
+        protected String getWord() {
             return guessed_word;
         }
-        private int getMistakes() {
+
+        protected String getOriginalWord() {
+            return original_word;
+        }        
+
+        protected int getMistakes() {
             return mistakes;
         } 
-        private int getMistakeLimit() {
+        protected int getMistakeLimit() {
             return mistakeLimit;
         }
 
-        private int getMissingChars() {
+        protected int getMissingChars() {
             return missingChars;
-        }  
+        } 
+
+        protected void setOriginalWord(String word) {
+            original_word = word;
+        }
+
+        protected void setGuessedWord(String word) {
+            guessed_word = word;
+        }
+
+        protected void incrementMistakes() {
+            this.mistakes++;
+        }
+
+        protected void setMistakeLimit(int mistakeLimit) {
+            this.mistakeLimit = mistakeLimit;
+        }
+
+        protected void setMissingChars(int missingChars) {
+            this.missingChars = missingChars;
+        }
     }
 
     private ArrayList<String> words;
@@ -68,9 +95,9 @@ public class WordGame {
     public void initGame(int wordIndex, int mistakeLimit) {
         gameState = new WordGameState();
         try {
-            gameState.original_word = words.get(wordIndex % words.size());
-            gameState.mistakeLimit = mistakeLimit;
-            gameState.missingChars = count_unique_chars(gameState.original_word);
+            gameState.setOriginalWord(words.get(wordIndex % words.size()));
+            gameState.setMistakeLimit(mistakeLimit);;
+            gameState.setMissingChars(count_unique_chars(gameState.getOriginalWord()));
             gameState.guessed_word = "_".repeat(gameState.original_word.length());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Error: " + e.getMessage());
@@ -110,29 +137,32 @@ public class WordGame {
             throw new GameStateException(ERROR_NO_GAME);
         } 
 
-        while (i < gameState.original_word.length()) {
-            if (gameState.original_word.charAt(i) == ch) {
-                if (gameState.guessed_word.charAt(i) == '_') {
-                    gameState.guessed_word =
-                    gameState.guessed_word.substring(0, i) +
-                    ch +
-                    gameState.guessed_word.substring(i + 1);    
+        while (i < gameState.getOriginalWord().length()) {
+            if (gameState.getOriginalWord().charAt(i) == ch) {
+                if (gameState.getWord().charAt(i) == '_') {
+                    gameState.setGuessedWord(
+                        gameState.getWord().substring(0, i) +
+                        ch +
+                        gameState.getWord().substring(i + 1)
+                    );    
 
                 correct_guess = true; 
                 }                           
             }
             i++;
         }
-        for (var asdf : gameState.guessed_word.toCharArray()) {
+        for (var asdf : gameState.getWord().toCharArray()) {
             if (asdf == '_') {
                 count_missing++;
             } 
         }
-        gameState.missingChars = count_missing;
+        gameState.setMissingChars(count_missing);
         if(!correct_guess) {
-            gameState.mistakes++;
+            gameState.incrementMistakes();
         }       
-        if (gameState.missingChars == 0 || gameState.mistakes > gameState.mistakeLimit) {
+        if (gameState.getMissingChars() == 0 ||
+            gameState.getMistakes() > gameState.getMistakeLimit())
+        {
             WordGameState temp = gameState;
             gameState = null;
             return temp;
@@ -145,13 +175,15 @@ public class WordGame {
             throw new GameStateException(ERROR_NO_GAME);
         }
 
-        if (guess.equals(gameState.original_word)) {
-            gameState.missingChars = 0;
-            gameState.guessed_word = gameState.original_word;
+        if (guess.equals(gameState.getOriginalWord())) {
+            gameState.setMissingChars(0);
+            gameState.setGuessedWord(gameState.getOriginalWord());
         } else {
-            gameState.mistakes++;
+            gameState.incrementMistakes();
         }
-        if (gameState.missingChars == 0 || gameState.mistakes > gameState.mistakeLimit) {
+        if (gameState.getMissingChars() == 0 ||
+            gameState.getMistakes() > gameState.getMistakeLimit())
+        {
             WordGameState temp = gameState;
             gameState = null;
             return temp;

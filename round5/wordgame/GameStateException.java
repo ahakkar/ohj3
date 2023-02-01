@@ -6,6 +6,8 @@
  * antti.i.hakkarainen@tuni.fi 
  */
 
+//package round5.wordgame;
+
 public class GameStateException extends Exception {
     public GameStateException(String message) {
         super(message);
