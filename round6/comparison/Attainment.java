@@ -30,7 +30,7 @@ public class Attainment implements Comparable<Attainment> {
         public int compare(Attainment a1, Attainment a2) {
             int result = a1.getCourseCode().compareTo(a2.getCourseCode());
             if (result == 0) {
-                result = a1.getGrade() - a2.getGrade();
+                result = a2.getGrade() - a1.getGrade();
             }
             return result;
         }
