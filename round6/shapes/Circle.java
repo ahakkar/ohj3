@@ -7,7 +7,7 @@ public class Circle implements IShapeMetrics {
 
 
     public String toString() {
-        return "Circle with radius: " + radius;
+        return String.format("Circle with radius: %.2f", radius);
     }
 
     
