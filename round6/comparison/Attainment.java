@@ -45,6 +45,10 @@ public class Attainment implements Comparable<Attainment> {
         return result;
     }
 
+    public String toString() {
+        return String.format("%s %s %d", courseCode, studentNumber, grade);
+    }
+
     public Attainment(String cc, String sn, int g) {
         courseCode = cc;
         studentNumber = sn;
