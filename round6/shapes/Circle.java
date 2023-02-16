@@ -1,4 +1,4 @@
-public class Circle {
+public class Circle implements IShapeMetrics {
     private double radius;
 
     public Circle(double radius) {
@@ -17,7 +17,7 @@ public class Circle {
 
 
     public double area() {
-        return Math.PI * radius * radius;
+        return PI * radius * radius;
     }
 
 

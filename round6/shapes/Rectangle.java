@@ -1,4 +1,4 @@
-public class Rectangle {
+public class Rectangle implements IShapeMetrics {
     private double length;
     private double width;
 
