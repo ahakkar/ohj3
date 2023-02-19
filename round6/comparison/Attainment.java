@@ -2,7 +2,7 @@ import java.util.Comparator;
 
 /*
  * COMP.CS.140 Ohjelmointi 3
- * H4 StudentRegister
+ * H6 StudentRegister evolved
  *
  * Antti Hakkarainen / K79735
  * antti.i.hakkarainen@tuni.fi 
