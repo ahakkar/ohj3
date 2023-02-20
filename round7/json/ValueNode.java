@@ -1,3 +1,12 @@
+/*
+ * COMP.CS.140 Ohjelmointi 3
+ * H7 JSON
+ *
+ * Antti Hakkarainen / K79735
+ * antti.i.hakkarainen@tuni.fi 
+ */
+
+
 public class ValueNode extends Node {
     private String value;
     private Double value_double;

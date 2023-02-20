@@ -1,3 +1,12 @@
+/*
+ * COMP.CS.140 Ohjelmointi 3
+ * H7 JSON
+ *
+ * Antti Hakkarainen / K79735
+ * antti.i.hakkarainen@tuni.fi 
+ */
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
