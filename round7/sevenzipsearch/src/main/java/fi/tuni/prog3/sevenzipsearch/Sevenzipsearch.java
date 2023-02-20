@@ -20,21 +20,21 @@ import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 public class Sevenzipsearch 
 {
     public static void main( String[] args )
-    {
-
+    {        
         // throw out bad command line arguments
         if (args.length != 2) {
             System.out.println("Usage: java -jar sevenzipsearch.jar <filename> <search>");
             System.exit(1);
-        }
+        }        
 
         Sevenzipsearch sz = new Sevenzipsearch();
         sz.read7ZipData(args[0], args[1]);
+        //sz.read7ZipData("java.7z", "oracle");
     }
 
     public void read7ZipData(String filename, String search) {
         String fn = String.format(filename);
-        //String fn = String.format("D:\\GDrive\\study\\TUNI2022\\ohj3\\round7\\sevenzipsearch\\%s", filename);
+
 
         try(SevenZFile file = new SevenZFile(new File(fn))) {
             SevenZArchiveEntry entry;
@@ -45,13 +45,13 @@ public class Sevenzipsearch
                 // skip too short filenames
                 if (str.length() < 4) {
                     continue;
-                }
-
-                // print the file name if it's to spec
-                System.out.println(entry.getName());
+                }                
 
                 // read only text files
-                if (str.substring(str.length() - 4).equals(".txt")) {   
+                if (str.substring(str.length() - 4).equals(".txt")) {  
+                    // print the file name if it's to spec
+                    System.out.println(entry.getName());
+
                     readFileData(
                         file.getInputStream(entry),
                         search
@@ -78,7 +78,8 @@ public class Sevenzipsearch
         while (scn.hasNextLine()) {
             line = scn.nextLine(); 
 
-            if (line.contains(search)) {
+            // match rows which contain the search string, no matter the case
+            if (line.matches(String.format("(?i).*%s.*",(search)))) {
                 // format row number beforehand to make it a bit easier to read
                 String rown = String.format("%d: ", row);
 
