@@ -79,7 +79,7 @@ public class Sevenzipsearch
             line = scn.nextLine(); 
 
             // match rows which contain the search string, no matter the case
-            if (line.matches(String.format("(?i).*%s.*",(search)))) {
+            if (line.matches(String.format("(?i).*%s.*", search))) {
                 // format row number beforehand to make it a bit easier to read
                 String rown = String.format("%d: ", row);
 
