@@ -32,8 +32,8 @@ public class Sevenzipsearch
     }
 
     public void read7ZipData(String filename, String search) {
-        String fn = 
-            String.format("D:\\GDrive\\study\\TUNI2022\\ohj3\\round7\\sevenzipsearch\\%s", filename);
+        String fn = String.format(filename);
+        //String fn = String.format("D:\\GDrive\\study\\TUNI2022\\ohj3\\round7\\sevenzipsearch\\%s", filename);
 
         try(SevenZFile file = new SevenZFile(new File(fn))) {
             SevenZArchiveEntry entry;
