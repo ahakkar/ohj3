@@ -51,6 +51,11 @@
             <executions>
                 <execution>
                 <configuration>
+                        <archive>
+                        <manifest>
+                            <mainClass>fi.tuni.prog3.round7.sevenzipsearch.Sevenzipsearch</mainClass>
+                        </manifest>
+                    </archive>
                     <mainClass>fi.tuni.prog3.round7.sevenzipsearch.Sevenzipsearch</mainClass>
                     <attachToBuild>true</attachToBuild>
                 </configuration>
