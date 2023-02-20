@@ -1,4 +1,4 @@
-package fi.tuni.prog3.sevenzipsearch;
+package fi.tuni.prog3.round7.sevenzipsearch;
 
 import java.io.FileNotFoundException;
 
