@@ -44,6 +44,19 @@
 
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+      <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>
+                                fi.tuni.prog3.round7.sevenzipsearch.Sevenzipsearch
+                            </mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         <plugin>
             <groupId>com.jolira</groupId>
             <artifactId>onejar-maven-plugin</artifactId>
