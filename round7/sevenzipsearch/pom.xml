@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>fi.tuni.prog3.round7</groupId>
+  <groupId>fi.tuni.prog3</groupId>
   <artifactId>sevenzipsearch</artifactId>
   <version>1.0</version>
   <name>sevenzipsearch</name>
@@ -51,7 +51,7 @@
                     <archive>
                         <manifest>
                             <mainClass>
-                                fi.tuni.prog3.round7.sevenzipsearch.Sevenzipsearch
+                                fi.tuni.prog3.sevenzipsearch.Sevenzipsearch
                             </mainClass>
                         </manifest>
                     </archive>
@@ -66,10 +66,10 @@
                 <configuration>
                         <archive>
                         <manifest>
-                            <mainClass>fi.tuni.prog3.round7.sevenzipsearch.Sevenzipsearch</mainClass>
+                            <mainClass>fi.tuni.prog3.sevenzipsearch.Sevenzipsearch</mainClass>
                         </manifest>
                     </archive>
-                    <mainClass>fi.tuni.prog3.round7.sevenzipsearch.Sevenzipsearch</mainClass>
+                    <mainClass>fi.tuni.prog3.sevenzipsearch.Sevenzipsearch</mainClass>
                     <attachToBuild>true</attachToBuild>
                 </configuration>
                 <goals>
