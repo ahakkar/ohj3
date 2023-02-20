@@ -14,7 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
-import org.apache.commons.compress.archivers.sevenz.*;
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 
 public class Sevenzipsearch 
 {
