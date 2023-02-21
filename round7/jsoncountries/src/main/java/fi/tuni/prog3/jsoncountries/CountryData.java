@@ -39,9 +39,36 @@ public class CountryData {
             }
         }       
 
-        var country = new Country("ok", 1.0, 1, 1.0);
+        for (var key : json.keySet()) {
+            JsonObject obj = json.get(key);
+            // does not work. how to get all fields?
+            JsonArray recordArray = obj.getAsJsonObject("Root")
+                                       .getAsJsonObject("data")
+                                       .getAsJsonArray("record");
 
-        info.add(country);
+            for (var rec : recordArray) {
+                System.out.println(rec);
+            }
+
+            JsonObject firstRecord = recordArray.get(0).getAsJsonObject();
+            JsonArray fieldArray = firstRecord.getAsJsonArray("field");
+                        
+            for (var i = 0; i < fieldArray.size(); i++) {
+                var result = fieldArray.get(i).getAsJsonObject().get("name");
+                if (result != null) {
+                    System.out.println(result.getAsString());
+                }
+   
+/*                 JsonObject country = arr.get(i).getAsJsonObject();
+                JsonObject attributes = country.getAsJsonObject("attributes");
+                String name = attributes.get("name").getAsString();
+                double area = attributes.get("area").getAsDouble();
+                long population = attributes.get("population").getAsLong();
+                double gdp = attributes.get("gdp").getAsDouble(); */
+                //Country c = new Country(name, area, population, gdp);
+                //info.add(c);
+            }
+        }
 
         return info;
     }

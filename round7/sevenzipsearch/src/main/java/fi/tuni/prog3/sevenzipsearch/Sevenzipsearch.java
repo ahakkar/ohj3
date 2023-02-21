@@ -56,9 +56,9 @@ public class Sevenzipsearch
                         file.getInputStream(entry),
                         search
                         );
-                }   
 
-                System.out.println();       
+                    System.out.println();   
+                }                      
             }
         }
         catch (FileNotFoundException e) {
