@@ -7,6 +7,10 @@ public class Country implements Comparable<Country>
     private long population;
     private double gdp;
 
+    public Country(String name) {
+        this.name = name;
+    }
+
     public Country(String name, double area, long population, double gdp) {
         this.name = name;
         this.area = area;
@@ -15,8 +19,8 @@ public class Country implements Comparable<Country>
     }
 
     @Override
-    public int compareTo(Country c) {
-        return this.name.compareTo(c.name);
+    public int compareTo(Country o) {
+        return this.name.compareTo(o.name);
     }
 
     @Override
@@ -35,25 +39,31 @@ public class Country implements Comparable<Country>
         return fmt;
     }
 
-
     public String getName() {
-        return "";
+        return this.name;
     }
 
     public double getArea() {
-        return 0.0;
+        return this.area;
     }
     
     public long getPopulation() {
-        return 0;
+        return this.population;
     }
 
     public double getGdp() {
-        return 0.0;
+        return this.gdp;
     }
 
-    public static void main(String[] args) 
-    {
-        System.out.println("Hello World!");
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    public void setPopulation(long population) {
+        this.population = population;
+    }
+
+    public void setGdp(double gdp) {
+        this.gdp = gdp;
     }
 }
