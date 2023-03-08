@@ -81,7 +81,7 @@ public class ObjectNode extends Node implements Iterable<String> {
 
     /**
      * Returns the JSON node stored under the given name.
-     * @param key - the name of the name-node pair whose node should be returned.
+     * @param name - the name of the name-node pair whose node should be returned.
      * @return the JSON node corresponding to name, or null if such node does not exist.
      */
     public Node get(String name) {
@@ -95,8 +95,8 @@ public class ObjectNode extends Node implements Iterable<String> {
 
     /**
      * Stores a name - JSON node pair into this JSON object. If a name-node pair with the same name already exists, the previously existing node will be replaced.
-     * @param key - the name of the name-node pair.
-     * @param value - the JSON node of the name-node pair.
+     * @param name - the name of the name-node pair.
+     * @param node - the JSON node of the name-node pair.
      */
     public void set(String name, Node node) {
         map.put(name, node);

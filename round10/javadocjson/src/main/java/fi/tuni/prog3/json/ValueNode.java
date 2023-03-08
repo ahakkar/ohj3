@@ -52,53 +52,18 @@ public class ValueNode extends Node {
         this.value = value;
     }
 
-    /**
-     * Returns the stored value as a boolean value.
-     * @return the stored boolean value.
-     * @throws IllegalStateException - if the stored value is not a boolean value.
+        /**
+     * Checks whether this value node stores a number (double).
+     * @return true if this node stores a double value, otherwise false.
      */
-    public boolean getBoolean() {
-        if (value_bool == null) {
-            throw new IllegalStateException("Value is not a boolean");
+    public boolean isNumber() {
+        if (value_double != null) {
+            return true;
         }
-        return value_bool;
+        return false;
     }
 
-    /**
-     * Returns the stored value as null.
-     * @return null.
-     * @throws IllegalStateException - if the stored value is not null.
-     */
-    public Object getNull () {
-        if (value != null) {
-            throw new IllegalStateException("Value is not null");
-        }
-        return null;
-    }
-
-    /**
-     * Returns the stored value as a number (double).
-     * @return the stored number as a double value.
-     * @throws IllegalStateException - if the stored value is not a number.
-     */
-    public double getNumber() {
-        if (value_double == null) {
-            throw new IllegalStateException("Value is not a number");
-        }        
-        return value_double;
-    }
-
-    
-    /**
-     * Returns the stored value as a string.
-     * @return the stored string.
-     * @throws IllegalStateException - if the stored value is not a string.
-     */
-    public String getString() {
-        return value;
-    }
-
-    /**
+        /**
      * Checks whether this value node stores a boolean value.
      * @return true if this node stores a boolean value, otherwise false.
      */
@@ -107,6 +72,17 @@ public class ValueNode extends Node {
             return true;
         }
         return false;
+    } 
+
+        /**
+     * Checks whether this value node stores a string.
+     * @return true if this node stores a string, otherwise false.
+     */
+    public boolean isString() {
+        if (value != null) {
+            return true;
+        }
+        return false;     
     } 
 
     /**
@@ -121,27 +97,59 @@ public class ValueNode extends Node {
     }
 
     /**
-     * Checks whether this value node stores a number (double).
-     * @return true if this node stores a double value, otherwise false.
+     * Returns the stored value as a number (double).
+     * @return the stored number as a double value.
+     * @throws IllegalStateException - if the stored value is not a number.
      */
-    public boolean isNumber() {
-        if (value_double != null) {
-            return true;
-        }
-        return false;
+    public double getNumber() {
+        if (value_double == null) {
+            throw new IllegalStateException("Value is not a number");
+        }        
+        return value_double;
     }
 
 
+
+
     /**
-     * Checks whether this value node stores a string.
-     * @return true if this node stores a string, otherwise false.
+     * Returns the stored value as a boolean value.
+     * @return the stored boolean value.
+     * @throws IllegalStateException - if the stored value is not a boolean value.
      */
-    public boolean isString() {
-        if (value != null) {
-            return true;
+    public boolean getBoolean() {
+        if (value_bool == null) {
+            throw new IllegalStateException("Value is not a boolean");
         }
-        return false;     
-    } 
+        return value_bool;
+    }
+
+        
+    /**
+     * Returns the stored value as a string.
+     * @return the stored string.
+     * @throws IllegalStateException - if the stored value is not a string.
+     */
+    public String getString() {
+        return value;
+    }
+
+    /**
+     * Returns the stored value as null.
+     * @return null.
+     * @throws IllegalStateException - if the stored value is not null.
+     */
+    public Object getNull () {
+        if (value != null) {
+            throw new IllegalStateException("Value is not null");
+        }
+        return null;
+    }
+
+
+
+
+
+
 
     
 
