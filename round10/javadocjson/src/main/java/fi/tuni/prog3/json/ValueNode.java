@@ -89,7 +89,7 @@ public class ValueNode extends Node {
 
     /**
      * Checks whether this value node stores null.
-     * @return boolean - true or false.
+     * @return true if this node stores null, otherwise false.
      */
     public boolean isNull() {
         if (value == null) {
