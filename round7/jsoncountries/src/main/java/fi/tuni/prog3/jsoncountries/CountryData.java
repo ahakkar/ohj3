@@ -21,8 +21,7 @@ import com.google.gson.stream.JsonReader;
 public class CountryData {
 
     private class CustomJsonparser {
-        // store parsed json countries in a map, with a hashmap containing
-        // area, gdp and population   
+        // store parsed json countries in a map with Country class
         private Map<String, Country> countries = new HashMap<String, Country>(); 
 
         // store data from multiple json files in a hashmap
