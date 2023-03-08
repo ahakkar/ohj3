@@ -16,7 +16,7 @@ def main():
 def t_transform(temp, type):
 
     if type == 'c':
-        return float(temp * 9/15 + 32)
+        return float(temp * 9.0/5.0 + 32)
 
     return None
 
