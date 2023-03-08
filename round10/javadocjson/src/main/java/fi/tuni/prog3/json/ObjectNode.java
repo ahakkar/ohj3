@@ -22,7 +22,8 @@ import java.util.Set;
  */
 public class ObjectNode extends Node implements Iterable<String> {
 
-    /* sorts the keys to lexicographical alphabetical order.. */
+
+    /*
     public class ObjectNodeIterator implements Iterator<String> {
         
         private Iterator<String> iterator;
@@ -57,7 +58,7 @@ public class ObjectNode extends Node implements Iterable<String> {
             iterator.remove();
         }
     }
-
+    */
 
     private HashMap<String, Node> map;
 
@@ -67,6 +68,14 @@ public class ObjectNode extends Node implements Iterable<String> {
      */
     public ObjectNode() {
         this.map = new HashMap<String, Node>();
+    }
+
+        /**
+     * Returns the number of JSON nodes stored under this JSON object.
+     * @return the number of JSON nodes under this JSON object.
+     */
+    public int size() {
+        return map.size();
     }
 
 
@@ -82,14 +91,7 @@ public class ObjectNode extends Node implements Iterable<String> {
         return null;
     }
 
-    /**
-     * Returns a String iterator that iterates the names of the name-node pairs stored in this JSON object in natural String order.
-     * @return a String iterator that iterates the names of the stored name-node pairs in natural String order.
-     */
-    @Override
-    public Iterator<String> iterator() {
-        return new ObjectNodeIterator(map);
-    }
+
 
     /**
      * Stores a name - JSON node pair into this JSON object. If a name-node pair with the same name already exists, the previously existing node will be replaced.
@@ -101,13 +103,16 @@ public class ObjectNode extends Node implements Iterable<String> {
 
     }
 
-
-    /**
-     * Returns the number of JSON nodes stored under this JSON object.
-     * @return the number of JSON nodes under this JSON object.
+        /**
+     * Returns a String iterator that iterates the names of the name-node pairs stored in this JSON object in natural String order.
+     * @return a String iterator that iterates the names of the stored name-node pairs in natural String order.
      */
-    public int size() {
-        return map.size();
+    @Override
+    public Iterator<String> iterator() {
+        return null;
     }
+
+
+
 }
 
