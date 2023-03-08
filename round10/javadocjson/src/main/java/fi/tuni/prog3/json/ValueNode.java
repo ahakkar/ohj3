@@ -24,6 +24,14 @@ public class ValueNode extends Node {
     }
 
     /**
+     * Constructs a JSON value node that stores the given boolean value.
+     * @param value - The boolean value to store in the new JSON value node.
+     */
+    public ValueNode(boolean value) {
+        this.value_bool = value;
+    }
+
+    /**
      * Constructs a JSON value node that stores the given double value.
      * @param value - The double value to store in the new JSON value node.
      */
@@ -31,13 +39,6 @@ public class ValueNode extends Node {
         this.value_double = value;
     }
 
-    /**
-     * Constructs a JSON value node that stores the given boolean value.
-     * @param value - The boolean value to store in the new JSON value node.
-     */
-    public ValueNode(boolean value) {
-        this.value_bool = value;
-    }
 
     /**
      * Constructs a JSON value node that stores the given string.
@@ -49,6 +50,18 @@ public class ValueNode extends Node {
             throw new IllegalStateException("Value is null");
         }
         this.value = value;
+    }
+
+    /**
+     * Returns the stored value as a boolean value.
+     * @return the stored boolean value.
+     * @throws IllegalStateException - if the stored value is not a boolean value.
+     */
+    public boolean getBoolean() {
+        if (value_bool == null) {
+            throw new IllegalStateException("Value is not a boolean");
+        }
+        return value_bool;
     }
 
     /**
@@ -75,18 +88,7 @@ public class ValueNode extends Node {
         return value_double;
     }
 
-    /**
-     * Returns the stored value as a boolean value.
-     * @return the stored boolean value.
-     * @throws IllegalStateException - if the stored value is not a boolean value.
-     */
-    public boolean getBoolean() {
-        if (value_bool == null) {
-            throw new IllegalStateException("Value is not a boolean");
-        }
-        return value_bool;
-    }
-
+    
     /**
      * Returns the stored value as a string.
      * @return the stored string.
@@ -94,17 +96,6 @@ public class ValueNode extends Node {
      */
     public String getString() {
         return value;
-    }
-
-    /**
-     * Checks whether this value node stores a number (double).
-     * @return true if this node stores a double value, otherwise false.
-     */
-    public boolean isNumber() {
-        if (value_double != null) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -119,6 +110,29 @@ public class ValueNode extends Node {
     } 
 
     /**
+     * Checks whether this value node stores null.
+     * @return boolean - true or false.
+     */
+    public boolean isNull() {
+        if (value == null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether this value node stores a number (double).
+     * @return true if this node stores a double value, otherwise false.
+     */
+    public boolean isNumber() {
+        if (value_double != null) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * Checks whether this value node stores a string.
      * @return true if this node stores a string, otherwise false.
      */
@@ -130,10 +144,5 @@ public class ValueNode extends Node {
     } 
 
     
-    public boolean isNull() {
-        if (value == null) {
-            return true;
-        }
-        return false;
-    }
+
 }

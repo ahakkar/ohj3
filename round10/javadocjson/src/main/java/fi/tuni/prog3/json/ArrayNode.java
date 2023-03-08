@@ -34,19 +34,19 @@ public class ArrayNode extends Node implements Iterable<Node> {
     }
 
     /**
-     * Returns the number of JSON nodes stored in this JSON array.
-     * @return the number of JSON nodes in this JSON array.
-     */
-    public int size() {
-        return arr.size();
-    }
-
-    /**
     * Returns a Node iterator that iterates the JSON nodes stored in this JSON array.
     * @return a Node iterator that iterates the JSON nodes stored in this JSON array.
     */
     @Override
     public Iterator<Node> iterator() {
         return arr.iterator();  
+    }
+
+    /**
+     * Returns the number of JSON nodes stored in this JSON array.
+     * @return the number of JSON nodes in this JSON array.
+     */
+    public int size() {
+        return arr.size();
     }
 }

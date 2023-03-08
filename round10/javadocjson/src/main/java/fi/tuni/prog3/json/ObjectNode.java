@@ -71,15 +71,6 @@ public class ObjectNode extends Node implements Iterable<String> {
 
 
     /**
-     * Returns a String iterator that iterates the names of the name-node pairs stored in this JSON object in natural String order.
-     * @return a String iterator that iterates the names of the stored name-node pairs in natural String order.
-     */
-    @Override
-    public Iterator<String> iterator() {
-        return new ObjectNodeIterator(map);
-    }
-
-    /**
      * Returns the JSON node stored under the given name.
      * @param key - the name of the name-node pair whose node should be returned.
      * @return the JSON node corresponding to name, or null if such node does not exist.
@@ -89,6 +80,15 @@ public class ObjectNode extends Node implements Iterable<String> {
             return map.get(key);
         }
         return null;
+    }
+
+    /**
+     * Returns a String iterator that iterates the names of the name-node pairs stored in this JSON object in natural String order.
+     * @return a String iterator that iterates the names of the stored name-node pairs in natural String order.
+     */
+    @Override
+    public Iterator<String> iterator() {
+        return new ObjectNodeIterator(map);
     }
 
     /**
