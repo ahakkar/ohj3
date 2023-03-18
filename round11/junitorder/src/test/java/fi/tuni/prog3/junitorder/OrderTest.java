@@ -234,7 +234,9 @@ public class OrderTest {
         assertEquals(1, entries.get(2).getCount());
 
         assertTrue(order.removeItems("Milk", 2));
-        assertEquals(3, entries.size());
+        assertEquals(order.getEntryCount(), 2);
+        assertEquals(entries.size(), 3);
+        
         assertEquals("Milk", entries.get(0).getItem().getName());
         assertEquals(2, entries.get(0).getCount());
         assertEquals("Bread", entries.get(1).getItem().getName());
@@ -266,16 +268,6 @@ public class OrderTest {
         assertEquals(5, entries.get(1).getCount());
         assertEquals("Butter", entries.get(2).getItem().getName());
         assertEquals(1, entries.get(2).getCount());
-    }
-
-    @Test
-    public void testGetEntries() {
-        testGetEntriesNull();
-        testGetEntriesSizeMatches();
-        testGetEntriesAreSame();
-        testGetEntriesRemoval();
-        testGetEntriesOriginalOrder();
-        
     }
 
 
