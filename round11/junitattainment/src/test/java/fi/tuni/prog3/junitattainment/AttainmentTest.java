@@ -30,7 +30,7 @@ public class AttainmentTest {
     @Test
     public void testToString() {
         Attainment att = new Attainment("COMP.CS.140", "230523906", 5);
-        Assertions.assertEquals("COMP.CS.140, 230523906, 5", att.toString());
+        Assertions.assertEquals("COMP.CS.140 230523906 5", att.toString());
 
     }
 
