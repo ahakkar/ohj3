@@ -158,6 +158,7 @@ public class OrderTest {
         Order order = new Order();
         Order.Item item1 = new Order.Item("Milk", 1.35);
         Order.Item item2 = new Order.Item("Bread", 3.20);
+        
 
         assertTrue(order.addItems(item1, 2));
         assertTrue(order.addItems(item2, 5));
@@ -170,9 +171,14 @@ public class OrderTest {
         assertEquals("Bread", entries.get(1).getItem().getName());
         assertEquals(5, entries.get(1).getCount());
 
+        Order.Item item3 = new Order.Item("Butter", 4.5);
+        Order.Entry entry1 = new Order.Entry(item3, 2);
+
         // The list being returned should be a copy of the internal list
         // so that the caller cannot modify the internal list
         entries.remove(1);
+        assertEquals(2, order.getEntryCount());
+        entries.add(entry1);
         assertEquals(2, order.getEntryCount());
         
     }
