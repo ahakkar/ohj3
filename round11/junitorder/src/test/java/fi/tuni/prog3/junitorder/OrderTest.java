@@ -117,6 +117,21 @@ public class OrderTest {
         assertThrows(IllegalStateException.class, () -> order.addItems(item2, 3));
     }
 
+    @Test
+    public void testAddSameItemManyTimes() {
+        Order order = new Order();
+        Order.Item item1 = new Order.Item("Milk", 1.35);
+
+        assertTrue(order.addItems(item1, 2));
+        assertTrue(order.addItems(item1, 25));
+        assertEquals(order.getItemCount(), 27);
+        assertTrue(order.addItems(item1, 256));
+        assertEquals(order.getItemCount(), 283);
+        assertTrue(order.addItems("Milk", 1));
+        assertEquals(order.getItemCount(), 284);
+        
+    }
+
 
     @Test
     public void testRemoveItems() {
@@ -154,6 +169,12 @@ public class OrderTest {
         assertEquals(2, entries.get(0).getCount());
         assertEquals("Bread", entries.get(1).getItem().getName());
         assertEquals(5, entries.get(1).getCount());
+
+        // The list being returned should be a copy of the internal list
+        // so that the caller cannot modify the internal list
+        entries.remove(1);
+        assertEquals(2, order.getEntryCount());
+        
     }
 
 
@@ -198,6 +219,9 @@ public class OrderTest {
 
         assertTrue(item1.equals(item3));
         assertFalse(item1.equals(item2));
+
+        assertThrows(IllegalArgumentException.class, () -> new Order.Item("Milk", -256));
+        assertThrows(IllegalArgumentException.class, () -> new Order.Item(null, 3));
 
         assertEquals(item1.getName(), "Milk");
         assertEquals(item1.getPrice(), 1.35);
