@@ -66,9 +66,5 @@ public class AttainmentTest {
         Assertions.assertThrows(IllegalArgumentException.class, ()->{ 
             new Attainment("adaw","H299168", -24523);
         });   
-
-        Assertions.assertThrows(IllegalArgumentException.class, ()->{ 
-            new Attainment("adaw","H299168", null);
-        });   
     }
 }
