@@ -73,7 +73,7 @@ public class Attainment implements Comparable<Attainment> {
     }
 
     public String toString() {
-        return courseCode +" " + studentNumber + " " + grade;
+        return String.format("%s %s %d", courseCode, studentNumber, grade);
     }
     
 }
