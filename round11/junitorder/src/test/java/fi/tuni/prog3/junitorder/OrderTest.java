@@ -196,14 +196,15 @@ public class OrderTest {
         assertTrue(order.addItems(item2, 5));
         assertTrue(order.addItems(item3, 1));
 
+
         List<Order.Entry> entries = order.getEntries();
 
         assertEquals(3, entries.size());
-        assertEquals("Milk", entries.get(0).getItem().getName());
+        assertEquals("Milk", entries.get(0).getItemName());
         assertEquals(2, entries.get(0).getCount());
-        assertEquals("Bread", entries.get(1).getItem().getName());
+        assertEquals("Bread", entries.get(1).getItemName());
         assertEquals(5, entries.get(1).getCount());
-        assertEquals("Butter", entries.get(2).getItem().getName());
+        assertEquals("Butter", entries.get(2).getItemName());
         assertEquals(1, entries.get(2).getCount());
     }
 
@@ -225,24 +226,32 @@ public class OrderTest {
 
         List<Order.Entry> entries = order.getEntries();
 
-        assertEquals(3, entries.size());
-        assertEquals("Milk", entries.get(0).getItem().getName());
-        assertEquals(2, entries.get(0).getCount());
-        assertEquals("Bread", entries.get(1).getItem().getName());
-        assertEquals(5, entries.get(1).getCount());
-        assertEquals("Butter", entries.get(2).getItem().getName());
-        assertEquals(1, entries.get(2).getCount());
+        // add items and check that the getEntries list has the expected contents
+        assertEquals(order.getEntryCount(), 3);
+        assertEquals(entries.size(), 3);
 
+        assertEquals(entries.get(0).getItemName(), "Milk");
+        assertEquals(entries.get(0).getCount(), 2);
+
+        assertEquals(entries.get(1).getItemName(), "Bread");
+        assertEquals(entries.get(1).getCount(), 5);
+
+        assertEquals(entries.get(2).getItemName(), "Butter");
+        assertEquals(entries.get(2).getCount(), 1);
+
+        // remove item and check that the list is not modified
         assertTrue(order.removeItems("Milk", 2));
         assertEquals(order.getEntryCount(), 2);
         assertEquals(entries.size(), 3);
         
-        assertEquals("Milk", entries.get(0).getItem().getName());
-        assertEquals(2, entries.get(0).getCount());
-        assertEquals("Bread", entries.get(1).getItem().getName());
-        assertEquals(5, entries.get(1).getCount());
-        assertEquals("Butter", entries.get(2).getItem().getName());
-        assertEquals(1, entries.get(2).getCount());
+        assertEquals(entries.get(0).getItemName(), "Milk");
+        assertEquals(entries.get(0).getCount(), 2);
+
+        assertEquals(entries.get(1).getItemName(), "Bread");
+        assertEquals(entries.get(1).getCount(), 5);
+
+        assertEquals(entries.get(2).getItemName(), "Butter");
+        assertEquals(entries.get(2).getCount(), 1);
     }
 
     /**
