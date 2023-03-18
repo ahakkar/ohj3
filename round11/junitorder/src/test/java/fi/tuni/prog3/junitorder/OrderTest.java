@@ -153,33 +153,128 @@ public class OrderTest {
     }
 
 
+    /*
+    Test that the returned list is not null.
+    Test that the returned list size matches the number of entries added to the order.
+    Test that the returned list contains the same entries that were added to the order.
+    Test that modifying the returned list does not affect the internal state of the order.
+    Test that the order entries are returned in the original adding order.
+     */
+
     @Test
-    public void testGetEntries() {
+    public void testGetEntriesNull() {
+        Order order = new Order();
+        List<Order.Entry> entries = order.getEntries();
+        assertNotNull(entries);
+    }
+
+
+    @Test 
+    public void testGetEntriesSizeMatches() {
         Order order = new Order();
         Order.Item item1 = new Order.Item("Milk", 1.35);
         Order.Item item2 = new Order.Item("Bread", 3.20);
-        
+        Order.Item item3 = new Order.Item("Butter", 4.5);
 
         assertTrue(order.addItems(item1, 2));
         assertTrue(order.addItems(item2, 5));
+        assertTrue(order.addItems(item3, 1));
 
         List<Order.Entry> entries = order.getEntries();
 
-        assertEquals(2, entries.size());
+        assertEquals(3, entries.size());
+    }
+
+    @Test
+    public void testGetEntriesAreSame() {
+        Order order = new Order();
+        Order.Item item1 = new Order.Item("Milk", 1.35);
+        Order.Item item2 = new Order.Item("Bread", 3.20);
+        Order.Item item3 = new Order.Item("Butter", 4.5);
+
+        assertTrue(order.addItems(item1, 2));
+        assertTrue(order.addItems(item2, 5));
+        assertTrue(order.addItems(item3, 1));
+
+        List<Order.Entry> entries = order.getEntries();
+
+        assertEquals(3, entries.size());
         assertEquals("Milk", entries.get(0).getItem().getName());
         assertEquals(2, entries.get(0).getCount());
         assertEquals("Bread", entries.get(1).getItem().getName());
         assertEquals(5, entries.get(1).getCount());
+        assertEquals("Butter", entries.get(2).getItem().getName());
+        assertEquals(1, entries.get(2).getCount());
+    }
 
+
+    /*
+     * The list being returned should be a copy of the internal list
+     *  so that the caller cannot modify the internal list
+     */
+    @Test
+    public void testGetEntriesRemoval() {
+        Order order = new Order();
+        Order.Item item1 = new Order.Item("Milk", 1.35);
+        Order.Item item2 = new Order.Item("Bread", 3.20);
         Order.Item item3 = new Order.Item("Butter", 4.5);
-        Order.Entry entry1 = new Order.Entry(item3, 2);
 
-        // The list being returned should be a copy of the internal list
-        // so that the caller cannot modify the internal list
-        entries.remove(1);
-        assertEquals(2, order.getEntryCount());
-        entries.add(entry1);
-        assertEquals(2, order.getEntryCount());
+        assertTrue(order.addItems(item1, 2));
+        assertTrue(order.addItems(item2, 5));
+        assertTrue(order.addItems(item3, 1));
+
+        List<Order.Entry> entries = order.getEntries();
+
+        assertEquals(3, entries.size());
+        assertEquals("Milk", entries.get(0).getItem().getName());
+        assertEquals(2, entries.get(0).getCount());
+        assertEquals("Bread", entries.get(1).getItem().getName());
+        assertEquals(5, entries.get(1).getCount());
+        assertEquals("Butter", entries.get(2).getItem().getName());
+        assertEquals(1, entries.get(2).getCount());
+
+        assertTrue(order.removeItems("Milk", 2));
+        assertEquals(3, entries.size());
+        assertEquals("Milk", entries.get(0).getItem().getName());
+        assertEquals(2, entries.get(0).getCount());
+        assertEquals("Bread", entries.get(1).getItem().getName());
+        assertEquals(5, entries.get(1).getCount());
+        assertEquals("Butter", entries.get(2).getItem().getName());
+        assertEquals(1, entries.get(2).getCount());
+    }
+
+    /**
+     * Test that the order entries are returned in the original adding order.
+     */
+    @Test
+    public void testGetEntriesOriginalOrder() {
+        Order order = new Order();
+        Order.Item item1 = new Order.Item("Milk", 1.35);
+        Order.Item item2 = new Order.Item("Bread", 3.20);
+        Order.Item item3 = new Order.Item("Butter", 4.5);
+
+        assertTrue(order.addItems(item1, 2));
+        assertTrue(order.addItems(item2, 5));
+        assertTrue(order.addItems(item3, 1));
+
+        List<Order.Entry> entries = order.getEntries();
+
+        assertEquals(3, entries.size());
+        assertEquals("Milk", entries.get(0).getItem().getName());
+        assertEquals(2, entries.get(0).getCount());
+        assertEquals("Bread", entries.get(1).getItem().getName());
+        assertEquals(5, entries.get(1).getCount());
+        assertEquals("Butter", entries.get(2).getItem().getName());
+        assertEquals(1, entries.get(2).getCount());
+    }
+
+    @Test
+    public void testGetEntries() {
+        testGetEntriesNull();
+        testGetEntriesSizeMatches();
+        testGetEntriesAreSame();
+        testGetEntriesRemoval();
+        testGetEntriesOriginalOrder();
         
     }
 
