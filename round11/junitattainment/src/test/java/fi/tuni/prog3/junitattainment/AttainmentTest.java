@@ -38,9 +38,9 @@ public class AttainmentTest {
     @Test
     public void testCompareTo() {
         System.out.println("CompareTo");
-        Attainment a1 = new Attainment("COMP.CS.140", "230523906", 2);
-        Attainment a2 = new Attainment("COMP.CS.140", "230523907", 3);
-        Attainment a3 = new Attainment("COMP.CS.140", "230523904", 4);
+        Attainment a1 = new Attainment("DPMBBE.017", "195358416", 5);
+        Attainment a2 = new Attainment("DPMBBE.017", "195358417", 4);
+        Attainment a3 = new Attainment("ACC.010", "195358416", 4);
 
         assertTrue(a1.compareTo(a2) < 0, "a1 should be less than a2");
         assertTrue(a1.compareTo(a3) > 0, "a1 should be greater than a3");
@@ -60,7 +60,11 @@ public class AttainmentTest {
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, ()->{ 
-            new Attainment("Testi", "H299168", 6);
+            new Attainment("Testi", "195358417", 6);
+        });
+
+        Assertions.assertThrows(IllegalArgumentException.class, ()->{ 
+            new Attainment("Testi", "195358417", -256);
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, ()->{ 

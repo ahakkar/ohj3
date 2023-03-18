@@ -2,11 +2,54 @@ package fi.tuni.prog3.junitattainment;
 
 import java.util.Comparator;
 
+/*
+ * COMP.CS.140 Ohjelmointi 3
+ * H6 StudentRegister evolved
+ *
+ * Antti Hakkarainen / K79735
+ * antti.i.hakkarainen@tuni.fi 
+ */
+
 public class Attainment implements Comparable<Attainment> {
 
     private String courseCode;
     private String studentNumber;
-    private Integer grade;
+    private int grade;
+
+    public static final Comparator<Attainment> CODE_STUDENT_CMP = new Comparator<Attainment>() {
+        @Override
+        public int compare(Attainment a1, Attainment a2) {
+            int result = a1.getCourseCode().compareTo(a2.getCourseCode());
+            if (result == 0) {
+                result = a1.getStudentNumber().compareTo(a2.getStudentNumber());
+            }
+            return result;
+        }
+    };
+
+    public static final Comparator<Attainment> CODE_GRADE_CMP = new Comparator<Attainment>() {
+        @Override
+        public int compare(Attainment a1, Attainment a2) {
+            int result = a1.getCourseCode().compareTo(a2.getCourseCode());
+            if (result == 0) {
+                result = a2.getGrade() - a1.getGrade();
+            }
+            return result;
+        }
+    };
+
+    @Override
+    public int compareTo(Attainment o) {
+        int result = studentNumber.compareTo(o.studentNumber);
+        if(result == 0) {
+            result = courseCode.compareTo(o.courseCode);
+        }
+        return result;
+    }
+
+    public String toString() {
+        return String.format("%s %s %d", courseCode, studentNumber, grade);
+    }
 
     public Attainment(String courseCode, String studentNumber, Integer grade) throws IllegalArgumentException{
         if (courseCode == null || studentNumber == null || grade == null) {
@@ -19,46 +62,6 @@ public class Attainment implements Comparable<Attainment> {
         this.grade = grade;
     }
 
-    @Override
-    public int compareTo(Attainment other) {
-        int res = this.studentNumber.compareTo(other.studentNumber);
-        if (res != 0) {
-            return res;
-        }
-        else {
-            return this.courseCode.compareTo(other.courseCode);
-        }
-    }
-
-    public static final Comparator<Attainment> CODE_STUDENT_CMP = new Comparator<Attainment>() {
-        @Override
-        public int compare(Attainment a1, Attainment a2) {
-            int res = a1.courseCode.compareTo(a2.courseCode);
-            if (res != 0) {
-                return res;
-            } 
-            else {
-                return a1.studentNumber.compareTo(a2.studentNumber);
-            }
-        }
-    };
-
-    public static final Comparator<Attainment> CODE_GRADE_CMP = new Comparator<Attainment>() {
-        @Override
-        public int compare(Attainment a1, Attainment a2) {
-            int res = a1.courseCode.compareTo(a2.courseCode);
-            if (res != 0) {
-                return res;
-            } 
-            else {
-                return Integer.compare(a2.grade, a1.grade);
-            }
-        }
-    };
-
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
 
     public String getCourseCode() {
         return courseCode;
@@ -67,13 +70,8 @@ public class Attainment implements Comparable<Attainment> {
     public String getStudentNumber() {
         return studentNumber;
     }
-
-    public Integer getGrade() {
+    
+    public int getGrade() {
         return grade;
     }
-
-    public String toString() {
-        return String.format("%s %s %d", courseCode, studentNumber, grade);
-    }
-    
 }
