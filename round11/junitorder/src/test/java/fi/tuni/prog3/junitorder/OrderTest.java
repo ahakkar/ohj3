@@ -202,7 +202,7 @@ public class OrderTest {
         assertEquals(item1.getName(), "Milk");
         assertEquals(item1.getPrice(), 1.35);
         assertNotEquals(item1.getPrice(), 2.50);
-        assertEquals(item1.toString(), "Item(Milk, 1,35)");
+        assertEquals(item1.toString(), "Item(Milk, 1.35)");
         assertNotEquals(item1.toString(), "Item(Bread, 3.20)");
     }
 
@@ -229,6 +229,6 @@ public class OrderTest {
         assertEquals(entry2.getCount(), 5);
         assertEquals(entry4.getCount(), 24354335);
 
-        assertEquals(entry4.toString(), "24354335 units of Item(Butter, 4,50)");
+        assertEquals(entry4.toString(), "24354335 units of Item(Butter, 4.50)");
     }
 }
