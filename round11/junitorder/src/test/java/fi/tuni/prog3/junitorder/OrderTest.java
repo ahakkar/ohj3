@@ -87,7 +87,6 @@ public class OrderTest {
         assertTrue(order.addItems("Bread", 5));
         assertEquals(14, order.getItemCount());
 
-
         assertEquals(order.isEmpty(), false);
     }
 
@@ -99,6 +98,10 @@ public class OrderTest {
         assertTrue(order.addItems(item1, 235235636));
         assertTrue(order.removeItems("asdsadsaddfg", 135232636));
         assertEquals(order.getItemCount(), 100003000);
+        assertTrue(order.addItems(item1, 1));
+        assertEquals(order.getItemCount(), 100003001);
+        assertTrue(order.addItems("asdsadsaddfg", 1));
+        assertEquals(order.getItemCount(), 100003002);
     }
 
 
@@ -111,7 +114,9 @@ public class OrderTest {
         assertThrows(NoSuchElementException.class, () -> order.addItems("doesnt exist lol", 2235));
         assertTrue(order.addItems(item1, 523));
         assertThrows(IllegalArgumentException.class, () -> order.addItems("Milk", -1));
+        assertThrows(IllegalArgumentException.class, () -> order.addItems("Milk", 0));
         assertThrows(IllegalArgumentException.class, () -> order.addItems(item1, -134));
+        assertThrows(IllegalArgumentException.class, () -> order.addItems(item1, 0));
 
         assertTrue(order.addItems(item1, 3));
         assertThrows(IllegalStateException.class, () -> order.addItems(item2, 3));
@@ -364,5 +369,53 @@ public class OrderTest {
         assertEquals(entry4.getCount(), 24354335);
 
         assertEquals(entry4.toString(), "24354335 units of Item(Butter, 4.50)");
+    }
+
+    @Test
+    public void testMultipleOrders() {
+        Order order1 = new Order();
+        Order order2 = new Order();
+        Order order3 = new Order();
+        Order order4 = new Order();
+        Order.Item item1 = new Order.Item("Milk", 1.35);
+        Order.Item item2 = new Order.Item("Bread", 3.20);
+        Order.Item item3 = new Order.Item("Butter", 4.5);
+        Order.Item item4 = new Order.Item("Whisky", 19.95);
+
+        assertTrue(order1.addItems(item1, 2));
+        assertTrue(order1.addItems(item2, 5));
+        assertTrue(order1.addItems(item3, 1));
+
+        assertTrue(order2.addItems(item1, 3));
+        assertTrue(order2.addItems(item2, 4));
+        assertTrue(order2.addItems(item3, 7));
+
+        assertTrue(order3.addItems(item1, 3));
+        assertTrue(order3.addItems(item4, 1));
+        assertTrue(order3.addItems(item2, 4));
+        assertTrue(order3.addItems(item3, 7));
+
+        assertTrue(order4.addItems(item1, 3));
+        assertTrue(order4.addItems(item2, 4));
+        assertTrue(order4.addItems(item3, 7));
+        assertTrue(order4.addItems(item4, 2));
+
+        assertEquals(3, order1.getEntryCount());
+        assertEquals(3, order2.getEntryCount());
+        assertEquals(4, order3.getEntryCount());
+        assertEquals(4, order4.getEntryCount());
+
+        assertEquals(23.2, order1.getTotalPrice());
+        assertEquals(48.35, order2.getTotalPrice());
+        assertEquals(68.3, order3.getTotalPrice());
+        assertEquals(88.25, order4.getTotalPrice());
+
+        assertEquals(8, order1.getItemCount());
+        assertEquals(14, order2.getItemCount());
+        assertEquals(15, order3.getItemCount());
+        assertEquals(16, order4.getItemCount());
+
+
+
     }
 }
