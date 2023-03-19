@@ -149,12 +149,18 @@ public class OrderTest {
         assertTrue(order.addItems(item1, 2));
         assertTrue(order.addItems(item2, 5));
 
+        assertThrows(IllegalArgumentException.class, () -> order.removeItems("Milk", 25));
+        assertThrows(IllegalArgumentException.class, () -> order.removeItems("Milk", -25));
+        assertThrows(IllegalArgumentException.class, () -> order.removeItems("Milk", 0));
+
         assertTrue(order.removeItems("Milk", 1));
         assertEquals(6, order.getItemCount());
         assertTrue(order.removeItems("Bread", 3));
         assertEquals(3, order.getItemCount());
-
-        assertThrows(IllegalArgumentException.class, () -> order.removeItems("Milk", 25));
+        assertTrue(order.removeItems("Bread", 1));
+        assertEquals(2, order.getItemCount());
+        assertTrue(order.removeItems("Milk", 1));
+        assertEquals(1, order.getEntryCount());
     }
 
 
