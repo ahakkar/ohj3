@@ -227,31 +227,31 @@ public class OrderTest {
         List<Order.Entry> entries = order.getEntries();
 
         // add items and check that the getEntries list has the expected contents
-        assertEquals(order.getEntryCount(), 3);
-        assertEquals(entries.size(), 3);
+        assertEquals(3, order.getEntryCount());
+        assertEquals(3, entries.size());
 
-        assertEquals(entries.get(0).getItemName(), "Milk");
-        assertEquals(entries.get(0).getCount(), 2);
+        assertEquals("Milk", entries.get(0).getItemName());
+        assertEquals(2, entries.get(0).getCount());
 
-        assertEquals(entries.get(1).getItemName(), "Bread");
-        assertEquals(entries.get(1).getCount(), 5);
+        assertEquals("Bread", entries.get(1).getItemName());
+        assertEquals(5, entries.get(1).getCount());
 
-        assertEquals(entries.get(2).getItemName(), "Butter");
-        assertEquals(entries.get(2).getCount(), 1);
+        assertEquals("Butter", entries.get(2).getItemName());
+        assertEquals(1, entries.get(2).getCount());
 
         // remove item and check that the list is not modified
         assertTrue(order.removeItems("Milk", 2));
-        assertEquals(order.getEntryCount(), 2);
-        assertEquals(entries.size(), 3);
+        assertEquals(2, order.getEntryCount());
+        assertEquals(3, entries.size());
         
-        assertEquals(entries.get(0).getItemName(), "Milk");
-        assertEquals(entries.get(0).getCount(), 2);
+        assertEquals("Milk", entries.get(0).getItemName());
+        assertEquals(2, entries.get(0).getCount());
 
-        assertEquals(entries.get(1).getItemName(), "Bread");
-        assertEquals(entries.get(1).getCount(), 5);
+        assertEquals("Bread", entries.get(1).getItemName());
+        assertEquals(5, entries.get(1).getCount());
 
-        assertEquals(entries.get(2).getItemName(), "Butter");
-        assertEquals(entries.get(2).getCount(), 1);
+        assertEquals("Butter", entries.get(2).getItemName());
+        assertEquals(1, entries.get(2).getCount());
     }
 
     /**
