@@ -7,29 +7,94 @@ package fi.tuni.prog3.wordle;
  * antti.i.hakkarainen@tuni.fi 
  */
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
+public class WordleController extends Wordle {
 
-public class WordleController implements Initializable {
+    WordleCore core;
+    GridPane letterGrid;
+    private Integer wordLength = -1; 
+    private String word;
+    private Scene scene;
+    private Pane root;
+    private static final Integer ROWS = 6;
+    private static final Integer TILE_SIZE = 50;
+    private Integer X_PADDING = 20;
+    private Integer Y_PADDING = 20;
+    private static final Integer GAP = 10;
     
-    @FXML
-    private Label labelOp1, labelOp2, labelRes, fieldRes;
+    public WordleController(Pane root, Scene scene) {
+        this.root = root;
+        this.scene = scene;
 
-    @FXML
-    private TextField fieldOp1, fieldOp2;
+        System.out.println("Initializing wordle core..");
+        core = new WordleCore();
+        wordLength = core.getWordLength();
+        word = core.getWord();
+        
+        setupWindowSize();
+        setupWindowStyle();
+        setupLetterGrid();        
+    }
+      
 
-    @FXML
-    private Button btnAdd, btnSub, btnMul, btnDiv;
-       
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {     
-        // TODO
-    }  
-    
+    /**
+     * Sets up the window size.
+     */
+    private void setupWindowSize() {
+        System.out.println("Setting up window size..");
+        int windowWidth = wordLength * TILE_SIZE + X_PADDING + (wordLength + 2 )* GAP;
+        int windowHeight = ROWS * TILE_SIZE + Y_PADDING + (ROWS + 10 )* GAP*2;
+
+        System.out.println(windowWidth + "x" + windowHeight);
+        scene.getWindow().setWidth(windowWidth);
+        scene.getWindow().setHeight(windowHeight);
+    }
+
+    /**
+     * Sets up the window style.
+     */
+    private void setupWindowStyle() {
+        System.out.println("Setting up window style..");
+        scene.setFill(Color.GRAY);;
+    }
+
+    /**
+     * Sets up the letter grid, adds it to the scene.
+     */
+    private void setupLetterGrid() {
+        letterGrid = new GridPane();
+        letterGrid.setPadding(new Insets(GAP));
+        letterGrid.setHgap(GAP);
+        letterGrid.setVgap(GAP);
+        root.getChildren().add(letterGrid);
+
+        renderLetterBoxes();
+    }
+
+    /**
+     * Renders wordLength boxes to a row, each box containing a letter from the word.
+     * There are N rows total.
+     */
+    private void renderLetterBoxes() {
+
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < wordLength; col++) {
+                // put a letter only to the first row
+                try {
+                    LetterTile lt = new LetterTile(row == 0 ? word.charAt(col) : '\0', col, row, TILE_SIZE);   
+                    letterGrid.add(lt.getLetterTile(), col, row);   
+                }
+                catch (Exception e) {
+                    System.out.println("Exception while trying to add a LetterTile: " + e);
+                    e.printStackTrace();
+                    System.exit(1);
+                }   
+            }
+        }
+    }    
 }
