@@ -51,8 +51,6 @@ public class Calculator extends Application {
             System.out.println("Exception: " + e);
             throw e;
         }
-
-        return fxmlLoader.load();
     }
 
     public static void main(String[] args) {
