@@ -13,10 +13,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
+
 import javafx.event.EventHandler;
-import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
+import fi.tuni.prog3.wordle.GuessResult;
 
 /**
  * WordleController class.
@@ -26,14 +30,20 @@ public class WordleController extends Wordle {
     WordleCore core;
     GridPane letterGrid;
     private Integer wordLength = -1; 
-    private String word;
+    private String correctWord;
+    private String currentWord;
     private Scene scene;
     private Pane root;
-    private static final Integer ROWS = 6;
-    private static final Integer TILE_SIZE = 50;
+   
     private Integer X_PADDING = 20;
     private Integer Y_PADDING = 20;
+
+    private static final Integer ROWS = 6;
+    private static final Integer TILE_SIZE = 50;
     private static final Integer GAP = 10;
+    private static final Character EMPTY_CHAR = ' ';
+
+    private ArrayList<Guess> guesses = new ArrayList<Guess>();
 
     private Integer current_col = 0;
     private Integer current_row = 0;
@@ -50,7 +60,7 @@ public class WordleController extends Wordle {
         System.out.println("Initializing wordle core..");
         core = new WordleCore();
         wordLength = core.getWordLength();
-        word = core.getWord();        
+        correctWord = core.getWord();        
         
         setupWindowSize();
         setupWindowStyle();
@@ -72,7 +82,9 @@ public class WordleController extends Wordle {
                 if (event.getCode().isLetterKey()) {
                     if (current_col < wordLength) {
                         Character inputChar = event.getText().charAt(0);
-                        updateLetterTile(current_col, current_row, inputChar);
+                        // add the typed letter to the current word
+                        currentWord += inputChar;
+                        updateLetterTile(current_col, current_row, inputChar, Color.BLACK, Color.WHITE);
                         current_col++;  
                     }                  
                 }
@@ -80,16 +92,51 @@ public class WordleController extends Wordle {
                 // backspace & delete keys remove the last typed letter
                 else if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE) {
                     if (current_col > 0) {
+                        // remove 1 char from end of current word
+                        currentWord = currentWord.substring(0, currentWord.length() - 1);
+                        updateLetterTile(current_col, current_row, EMPTY_CHAR, Color.BLACK, Color.WHITE);
                         current_col--;
-                        updateLetterTile(current_col, current_row, '\0');
+                        
                     }                    
                 }
                 // enter grades the guess, colors the correct letters green and the incorrect letters orange
                 else if (event.getCode() == KeyCode.ENTER) {
-                   
+                    userGuessed();
+                    currentWord = "";
+                    current_col = 0;
+                    current_row++;
+                                    
                 }  
             }
         });
+    }
+
+
+    /**
+     * Updates the LetterTile objects based on the guess results.
+     */
+    private void userGuessed() {
+        // DEBUG
+        String fmt = String.format("%s %s %d", currentWord, correctWord, wordLength);
+        System.out.println(fmt);
+
+        Guess guess = new Guess(currentWord, correctWord);
+        guess.gradeGuess();
+        guesses.add(guess);
+        ArrayList<GuessResult> result = guess.getResult();
+
+        for (int i = 0; i < wordLength; i++) {
+            Character letter = currentWord.charAt(i);
+            if (result.get(i) == GuessResult.CORRECT) {
+                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREEN);
+            }
+            else if (result.get(i) == GuessResult.MISPLACED) {
+                updateLetterTile(i, current_row, letter, Color.WHITE, Color.ORANGE);
+            }
+            else if (result.get(i) == GuessResult.WRONG) {
+                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREY);
+            }
+        }       
     }
       
 
@@ -139,7 +186,7 @@ public class WordleController extends Wordle {
             for (int col = 0; col < wordLength; col++) {
                 // put a letter only to the first row
                 try {
-                    LetterTile lt = new LetterTile('\0', col, row, TILE_SIZE);   
+                    LetterTile lt = new LetterTile(EMPTY_CHAR, col, row, TILE_SIZE);   
                     letterGrid.add(lt.getLetterTile(), col, row);   
                 }
                 catch (Exception e) {
@@ -158,9 +205,10 @@ public class WordleController extends Wordle {
      * @param y the y coordinate
      * @param letter the new letter to be displayed      
      */
-    public void updateLetterTile(int x, int y, Character letter) {
+    public void updateLetterTile(int x, int y, Character letter, Color charColor, Color color) {
         LetterTile lt = getLetterTileAt(x, y);
-        lt.setLetter(letter);   
+        lt.setLetter(letter, charColor);   
+        lt.setTileColor(color);
     }
 
 

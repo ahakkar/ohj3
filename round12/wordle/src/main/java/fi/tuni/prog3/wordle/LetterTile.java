@@ -7,7 +7,6 @@ package fi.tuni.prog3.wordle;
  * antti.i.hakkarainen@tuni.fi 
  */
 
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Region;
@@ -33,6 +32,7 @@ public class LetterTile extends Region {
     private Character letter;
     private Coordinates Coords;
     private int TILE_SIZE;
+    private Rectangle tile;
     private Text text;
 
     public LetterTile(Character letter, int x, int y, int TILE_SIZE) {
@@ -43,7 +43,7 @@ public class LetterTile extends Region {
     }
 
     private void initGraphics() {
-        Rectangle tile = new Rectangle(TILE_SIZE, TILE_SIZE);
+        tile = new Rectangle(TILE_SIZE, TILE_SIZE);
         tile.setFill(Color.WHITE);
         tile.setStroke(Color.BLACK);
 
@@ -99,9 +99,16 @@ public class LetterTile extends Region {
      * Sets the text of the tile.
      * @param letter Character
      */
-    public void setLetter(Character letter) {
+    public void setLetter(Character letter, Color color) {
         this.letter = letter;
         text.setText(Character.toString(letter).toUpperCase());
+        text.setFill(color);
     }
-    
+
+    /**
+     * Sets the color of the tile.
+     */
+    public void setTileColor(Color color) {
+        tile.setFill(color);
+    }    
 }
