@@ -9,6 +9,7 @@ package fi.tuni.prog3.calc;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +22,7 @@ public class PrimaryController implements Initializable {
     private enum Operation {ADD, SUBTRACT, MULTIPLY, DIVIDE, NONE};
     
     @FXML
-    private Label labelRes;
+    private Label labelOp1, labelOp2, labelRes;
 
     @FXML
     private TextField fieldOp1, fieldOp2, fieldRes;
@@ -57,45 +58,48 @@ public class PrimaryController implements Initializable {
         calculate(Operation.DIVIDE);
     }
 
-    private void calculate(Operation op) {
+    private void calculate(Operation op) {        
         String op1Str = fieldOp1.getText();
         String op2Str = fieldOp2.getText();
+        double op1 = Double.parseDouble(fieldOp1.getText());
+        double op2 = Double.parseDouble(fieldOp2.getText());
+        Double result = 0.0;
 
+        // check for no values
         if (op1Str == "" || op2Str == "") { 
             return;
         }
 
-        double op1 = Double.parseDouble(fieldOp1.getText());
-        double op2 = Double.parseDouble(fieldOp2.getText());
-
+        // check for zeroes
         if (op1 == 0 || op2 == 0) {
             fieldRes.setText("0");
             return;
-        }
+        }        
 
         switch (op) {
             case ADD:            
-                fieldRes.setText(Double.toString(op1 + op2));
+                result = op1 + op2;
                 break;
             case SUBTRACT:
-                fieldRes.setText(Double.toString(op1 - op2));
+                result = op1 - op2;
                 break;
             case MULTIPLY:
-                fieldRes.setText(Double.toString(op1 * op2));
+                result = op1 * op2;
                 break;
             case DIVIDE:
                 // Division by zero is not allowed
                 if (op2 == 0) {
-                    fieldRes.setText("0");
-                    return;
+                    break;
                 }
-                fieldRes.setText(Double.toString(op1 / op2));
+                result = op1 / op2;
                 break;
-            default:
-                // do something if myColor is none of the above
+            default:                
                 break;
         }
-        }
+
+        // set result
+        fieldRes.setText(result.toString());
+    }
     
     
 }
