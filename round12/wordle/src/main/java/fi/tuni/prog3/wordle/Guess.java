@@ -23,6 +23,7 @@ public class Guess {
     int correctLetters = 0;
     int misplacedLetters = 0;
     int wrongLetters = 0;
+    boolean isCorrect = false;
 
     private ArrayList<GuessResult> result;
 
@@ -39,9 +40,9 @@ public class Guess {
         wrongLetters = 0;
     
         // Iterate through each character in the current word
-        for (int i = 0; i < guessedWord.length()-1; i++) {
+        for (int i = 0; i < guessedWord.length(); i++) {
             char currentChar = guessedWord.charAt(i);
-            char correctChar = guessedWord.charAt(i);
+            char correctChar = correctWord.charAt(i);
     
             // The current letter is correct
             if (currentChar == correctChar) {                
@@ -59,9 +60,17 @@ public class Guess {
                 wrongLetters++;
             }
         }
+
+        if (correctLetters == correctWord.length()) {
+            isCorrect = true;
+        }
     }    
 
     public ArrayList<GuessResult> getResult() {
         return result;
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
     }
 }

@@ -16,6 +16,7 @@ import java.net.URL;
 public class WordRepository {
 
     private ArrayList<String> words = new ArrayList<String>();
+    private int wordIndex = -1;
 
     /**
      * Constructor for WordRepository, calls the filereader
@@ -40,8 +41,9 @@ public class WordRepository {
      * Returns the first word in the arraylist
      * @return String first word in the arraylist
      */
-    public String getFirstWord() {
-        return words.get(0);
+    public String getNextWord() {
+        wordIndex++;
+        return words.get(wordIndex);
     }
 
 

@@ -31,7 +31,7 @@ public class WordleController extends Wordle {
     GridPane letterGrid;
     private Integer wordLength = -1; 
     private String correctWord;
-    private String currentWord;
+    private String currentWord = "";
     private Scene scene;
     private Pane root;
    
@@ -41,9 +41,7 @@ public class WordleController extends Wordle {
     private static final Integer ROWS = 6;
     private static final Integer TILE_SIZE = 50;
     private static final Integer GAP = 10;
-    private static final Character EMPTY_CHAR = ' ';
-
-    private ArrayList<Guess> guesses = new ArrayList<Guess>();
+    private static final Character EMPTY_CHAR = '\0';
 
     private Integer current_col = 0;
     private Integer current_row = 0;
@@ -60,7 +58,7 @@ public class WordleController extends Wordle {
         System.out.println("Initializing wordle core..");
         core = new WordleCore();
         wordLength = core.getWordLength();
-        correctWord = core.getWord();        
+        correctWord = core.getCorrectWord();        
         
         setupWindowSize();
         setupWindowStyle();
@@ -78,34 +76,24 @@ public class WordleController extends Wordle {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                System.out.println("Key pressed: " + event.getText() + " " + event.getCode());
+                // System.out.println("Key pressed: " + event.getText() + " " + event.getCode());
                 if (event.getCode().isLetterKey()) {
                     if (current_col < wordLength) {
-                        Character inputChar = event.getText().charAt(0);
-                        // add the typed letter to the current word
-                        currentWord += inputChar;
-                        updateLetterTile(current_col, current_row, inputChar, Color.BLACK, Color.WHITE);
-                        current_col++;  
+                        handleLetterKey(event);
                     }                  
                 }
 
                 // backspace & delete keys remove the last typed letter
                 else if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE) {
                     if (current_col > 0) {
-                        // remove 1 char from end of current word
-                        currentWord = currentWord.substring(0, currentWord.length() - 1);
-                        updateLetterTile(current_col, current_row, EMPTY_CHAR, Color.BLACK, Color.WHITE);
-                        current_col--;
-                        
+                        handleBackspacAndDeleteKeys(event);
                     }                    
                 }
                 // enter grades the guess, colors the correct letters green and the incorrect letters orange
                 else if (event.getCode() == KeyCode.ENTER) {
-                    userGuessed();
-                    currentWord = "";
-                    current_col = 0;
-                    current_row++;
-                                    
+                    if (current_col == wordLength) {
+                        handleEnterKey(event);
+                    }                                    
                 }  
             }
         });
@@ -113,30 +101,47 @@ public class WordleController extends Wordle {
 
 
     /**
-     * Updates the LetterTile objects based on the guess results.
+     * When use presses a letter key, add the letter to the current word.
+     * @param event
      */
-    private void userGuessed() {
-        // DEBUG
-        String fmt = String.format("%s %s %d", currentWord, correctWord, wordLength);
-        System.out.println(fmt);
+    private void handleLetterKey(KeyEvent event) {
+        Character inputChar = event.getText().charAt(0);
+        // add the typed letter to the current word
+        currentWord += Character.toLowerCase(inputChar);
+        updateLetterTile(current_col, current_row, inputChar, Color.BLACK, Color.WHITE);
+        current_col++;  
+    }
 
-        Guess guess = new Guess(currentWord, correctWord);
-        guess.gradeGuess();
-        guesses.add(guess);
-        ArrayList<GuessResult> result = guess.getResult();
 
-        for (int i = 0; i < wordLength; i++) {
-            Character letter = currentWord.charAt(i);
-            if (result.get(i) == GuessResult.CORRECT) {
-                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREEN);
-            }
-            else if (result.get(i) == GuessResult.MISPLACED) {
-                updateLetterTile(i, current_row, letter, Color.WHITE, Color.ORANGE);
-            }
-            else if (result.get(i) == GuessResult.WRONG) {
-                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREY);
-            }
-        }       
+    /**
+     * When user presses backspace or delete keys, remove the last typed letter.
+     * @param event
+     */
+    private void handleBackspacAndDeleteKeys(KeyEvent event) {
+        // remove 1 char from end of current word
+        currentWord = currentWord.substring(0, currentWord.length() - 1);
+        current_col--;
+        updateLetterTile(current_col, current_row, EMPTY_CHAR, Color.BLACK, Color.WHITE);       
+    }
+
+
+    /**
+     * When user presses enter key, grade the guess and color the correct 
+     * letters green and the incorrect letters orange, partial hits are colored grey.
+     * @param event
+     */
+    private void handleEnterKey(KeyEvent event) {
+        Guess result = core.gradeAGuess(currentWord, correctWord);   
+        updateRowAfterGuess(result);    
+
+        // check if guess was correct
+        if(result.isCorrect) {
+
+        }   
+
+        currentWord = "";
+        current_col = 0;
+        current_row++;
     }
       
 
@@ -159,7 +164,7 @@ public class WordleController extends Wordle {
      */
     private void setupWindowStyle() {
         System.out.println("Setting up window style..");
-        scene.setFill(Color.GRAY);;
+        scene.setFill(Color.rgb(200, 200, 200));;
     }
 
 
@@ -174,6 +179,22 @@ public class WordleController extends Wordle {
         root.getChildren().add(letterGrid);
 
         renderLetterBoxes();
+    }
+
+    private void updateRowAfterGuess(Guess currentGuess) {
+        ArrayList<GuessResult> result = currentGuess.getResult();
+        for (int i = 0; i < wordLength; i++) {
+            Character letter = currentWord.charAt(i);            
+            if (result.get(i) == GuessResult.CORRECT) {
+                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREEN);
+            }
+            else if (result.get(i) == GuessResult.MISPLACED) {
+                updateLetterTile(i, current_row, letter, Color.WHITE, Color.ORANGE);
+            }
+            else if (result.get(i) == GuessResult.WRONG) {
+                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREY);
+            }
+        }  
     }
 
 
