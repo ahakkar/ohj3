@@ -23,11 +23,11 @@ public class Calculator extends Application {
     @Override
     public void start(@SuppressWarnings("exports") Stage s) throws IOException {
         stage = s;
-        setRoot("primary","");
+        setRoot("primary", "Nelilaskin");
     }
 
     static void setRoot(String fxml) throws IOException {
-        setRoot(fxml,stage.getTitle());
+        setRoot(fxml, stage.getTitle());
     }
 
     static void setRoot(String fxml, String title) throws IOException {
@@ -38,7 +38,7 @@ public class Calculator extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Calculator.class.getResource("fxml/"+fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Calculator.class.getResource("/fxml/primary.fxml"));
         return fxmlLoader.load();
     }
 
