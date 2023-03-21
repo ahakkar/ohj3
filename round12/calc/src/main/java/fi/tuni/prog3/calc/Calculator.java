@@ -7,53 +7,56 @@ package fi.tuni.prog3.calc;
  * antti.i.hakkarainen@tuni.fi 
  */
 
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
-
 public class Calculator extends Application {
-    private static Stage stage;
+
     private static Scene scene;
- 
+
     @Override
-    public void start(@SuppressWarnings("exports") Stage s) throws IOException {
-        stage = s;
-        setRoot("primary", "Nelilaskin");
+    public void start(@SuppressWarnings("exports") Stage stage) throws IOException {
+        scene = new Scene(loadFXML("primary"));
+        stage.setScene(scene);
+        stage.show();
     }
 
     static void setRoot(String fxml) throws IOException {
-        setRoot(fxml, stage.getTitle());
-    }
-
-    static void setRoot(String fxml, String title) throws IOException {
-        scene = new Scene(loadFXML(fxml));        
-        stage.setTitle(title);
-        stage.setScene(scene);
-        stage.show();         
+        scene.setRoot(loadFXML(fxml));
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = null;
+
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Calculator.class.getResource("/fxml/" + fxml + ".fxml"));
-            return fxmlLoader.load();
-        } catch (IOException e) {
-            System.out.println("FXML file not found: " + fxml);
-            throw e;
-        } catch (IllegalStateException e) {
-            System.out.println("IllegalStateException when trying to load FXML file: " + fxml);
-            throw e;
-        } catch (Exception e) {
-            System.out.println("Exception: " + e);
-            throw e;
+            fxmlLoader = new FXMLLoader(Calculator.class.getResource(fxml + ".fxml"));                
+        } 
+        catch (IllegalStateException e) {
+            System.out.println("IllegalStateException when trying to load FXML file: /fxml/" + fxml + ".fxml");
+            e.printStackTrace();;
+            System.exit(1);
         }
+        catch (Exception e) {
+            System.out.println("Exception: " + e);
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        if (fxmlLoader == null) {
+            System.out.println("FXMLLoader is null, failed to load FXML file.");
+            System.exit(1);
+        }
+
+        return fxmlLoader.load();    
     }
 
     public static void main(String[] args) {
-        launch(args);
+        launch();
     }
+
 }
