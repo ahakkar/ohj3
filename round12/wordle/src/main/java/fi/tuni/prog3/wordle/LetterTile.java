@@ -33,6 +33,7 @@ public class LetterTile extends Region {
     private Character letter;
     private Coordinates Coords;
     private int TILE_SIZE;
+    private Text text;
 
     public LetterTile(Character letter, int x, int y, int TILE_SIZE) {
         this.letter = letter;
@@ -46,7 +47,7 @@ public class LetterTile extends Region {
         tile.setFill(Color.WHITE);
         tile.setStroke(Color.BLACK);
 
-        Text text = new Text(Character.toString(letter).toUpperCase());
+        text = new Text(Character.toString(letter).toUpperCase());
         text.setFont(Font.font(TILE_SIZE / 1.2));
 
 
@@ -62,20 +63,45 @@ public class LetterTile extends Region {
         this.setLayoutY(Coords.y * TILE_SIZE);
     }
 
+    /**
+     * Returns the x coordinate of the tile.
+     * @return int x
+     */
     public int getX() {
         return Coords.x;
     }
 
+    /**
+     * Returns the y coordinate of the tile.
+     * @return int y
+     */
     public int getY() {
         return Coords.y;
     }
 
+    /**
+     * Returns the letter of the tile.
+     * @return Character letter
+     */
     public Character getLetter() {
         return letter;
     }
 
+    /**
+     * Returns the tile as a Node.
+     * @return Node tile
+     */
     public Node getLetterTile() {
         return this;
+    }
+
+    /**
+     * Sets the text of the tile.
+     * @param letter Character
+     */
+    public void setLetter(Character letter) {
+        this.letter = letter;
+        text.setText(Character.toString(letter).toUpperCase());
     }
     
 }
