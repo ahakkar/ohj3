@@ -15,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
@@ -75,6 +76,18 @@ public class WordleController extends Wordle {
                         current_col++;  
                     }                  
                 }
+
+                // backspace & delete keys remove the last typed letter
+                else if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE) {
+                    if (current_col > 0) {
+                        current_col--;
+                        updateLetterTile(current_col, current_row, '\0');
+                    }                    
+                }
+                // enter grades the guess, colors the correct letters green and the incorrect letters orange
+                else if (event.getCode() == KeyCode.ENTER) {
+                   
+                }  
             }
         });
     }
