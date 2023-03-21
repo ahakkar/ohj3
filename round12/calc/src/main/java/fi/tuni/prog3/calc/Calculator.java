@@ -38,7 +38,20 @@ public class Calculator extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Calculator.class.getResource("/fxml/primary.fxml"));
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Calculator.class.getResource("/fxml/" + fxml + ".fxml"));
+            return fxmlLoader.load();
+        } catch (IOException e) {
+            System.out.println("FXML file not found: " + fxml);
+            throw e;
+        } catch (IllegalStateException e) {
+            System.out.println("IllegalStateException when trying to load FXML file: " + fxml);
+            throw e;
+        } catch (Exception e) {
+            System.out.println("Exception: " + e);
+            throw e;
+        }
+
         return fxmlLoader.load();
     }
 
