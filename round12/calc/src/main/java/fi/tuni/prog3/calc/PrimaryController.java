@@ -22,10 +22,10 @@ public class PrimaryController implements Initializable {
     private enum Operation {ADD, SUBTRACT, MULTIPLY, DIVIDE, NONE};
     
     @FXML
-    private Label labelOp1, labelOp2, labelRes;
+    private Label labelOp1, labelOp2, labelRes, fieldRes;
 
     @FXML
-    private TextField fieldOp1, fieldOp2, fieldRes;
+    private TextField fieldOp1, fieldOp2;
 
     @FXML
     private Button btnAdd, btnSub, btnMul, btnDiv;
@@ -68,13 +68,7 @@ public class PrimaryController implements Initializable {
         // check for no values
         if (op1Str == "" || op2Str == "") { 
             return;
-        }
-
-        // check for zeroes
-        if (op1 == 0 || op2 == 0) {
-            fieldRes.setText("0");
-            return;
-        }        
+        } 
 
         switch (op) {
             case ADD:            
