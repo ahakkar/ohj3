@@ -1,0 +1,1 @@
+start jlink-image\bin\javaw -jar modules\calc-1.0.jar
