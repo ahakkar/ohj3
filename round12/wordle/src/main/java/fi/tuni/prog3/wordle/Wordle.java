@@ -12,19 +12,19 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 public class Wordle extends Application {
 
     @Override
     public void start(@SuppressWarnings("exports") Stage stage) throws IOException {
-        Pane root = new Pane();
+        VBox root = new VBox();
         Scene scene = new Scene(root, 400, 300);
         stage.setScene(scene);
         stage.setTitle("Wordle");
         stage.show();
 
-        WordleController wc = new WordleController(root, scene);
+        WordleController wc = new WordleController(root, scene, stage);
     }
 
 
