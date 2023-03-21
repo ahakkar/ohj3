@@ -38,7 +38,7 @@ public class Calculator extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Calculator.class.getResource("/fxml/"+fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Calculator.class.getResource("fxml/"+fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
