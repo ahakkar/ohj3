@@ -23,54 +23,45 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-import fi.tuni.prog3.wordle.GuessResult;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * WordleController class.
  */
-public class WordleController extends Wordle {
-
-    WordleCore core;
-    GridPane letterGrid;
-    private Integer wordLength = -1; 
-    private String correctWord;
-    private String currentWord = "";
+public class WordleGUI extends Wordle {
 
     private Scene scene;
-    private Pane root;
-    private Stage stage;
-    private boolean gameOver = false;
-   
-    private Integer X_PADDING = 20;
-    private Integer Y_PADDING = 20;
+    private Pane root;   
+    private GridPane letterGrid;
+    private Label infoMsgLabel;
+    private Button startNewGameButton;
 
-    private static final Integer ROWS = 6;
-    private static final Integer TILE_SIZE = 50;
-    private static final Integer GAP = 10;
-    private static final Character EMPTY_CHAR = '\0';
-
+    private Integer correctWordLength = -1; 
     private Integer current_col = 0;
     private Integer current_row = 0;
+    protected boolean gameOver = false;
 
-    HBox infoHBox;
-    Label infoMsgLabel;
-    Button startNewGameButton;
+    private StringProperty currentWord;
+    private BooleanProperty enterKeyPressed;
+    private BooleanProperty newGameButtonPressed;
     
     /**
      * Constructor.
      * @param root The root pane.
      * @param scene The scene.
      */
-    public WordleController(VBox root, Scene scene, Stage stage) {
+    public WordleGUI(VBox root, Scene scene, Integer correctWordLength) {
         this.root = root;
-        this.scene = scene;
-        this.stage = stage;
+        this.scene = scene; 
 
-        core = new WordleCore();
-        wordLength = core.getWordLength();
-        correctWord = core.getCorrectWord();        
+        this.correctWordLength = correctWordLength;
+        this.currentWord = new SimpleStringProperty("");     
+        this.enterKeyPressed = new SimpleBooleanProperty(false); 
+        this.newGameButtonPressed = new SimpleBooleanProperty(false); 
         
         setupWindowSize();
         setupWindowStyle();        
@@ -94,7 +85,7 @@ public class WordleController extends Wordle {
 
                 // System.out.println("Key pressed: " + event.getText() + " " + event.getCode());
                 if (event.getCode().isLetterKey()) {
-                    if (current_col < wordLength) {
+                    if (current_col < correctWordLength) {
                         handleLetterKey(event);
                     }                  
                 }
@@ -106,7 +97,7 @@ public class WordleController extends Wordle {
                 }
                 // enter grades the guess, colors the correct letters green and the incorrect letters orange
                 else if (event.getCode() == KeyCode.ENTER) {
-                    if (current_col == wordLength) {
+                    if (current_col == correctWordLength) {
                         handleEnterKey(event);
                     } 
                     else {
@@ -125,7 +116,7 @@ public class WordleController extends Wordle {
     private void handleLetterKey(KeyEvent event) {
         Character inputChar = event.getText().charAt(0);
         // add the typed letter to the current word
-        currentWord += Character.toLowerCase(inputChar);
+        setCurrentWord(getCurrentWord() + Character.toLowerCase(inputChar));
         updateLetterTile(current_col, current_row, inputChar, Color.BLACK, Color.WHITE);
         current_col++;  
     }
@@ -137,9 +128,16 @@ public class WordleController extends Wordle {
      */
     private void handleBackspacAndDeleteKeys(KeyEvent event) {
         // remove 1 char from end of current word
-        currentWord = currentWord.substring(0, currentWord.length() - 1);
+        setCurrentWord(getCurrentWord().substring(0, getCurrentWord().length() - 1));
         current_col--;
-        updateLetterTile(current_col, current_row, EMPTY_CHAR, Color.BLACK, Color.WHITE);       
+
+        updateLetterTile(
+            current_col,
+            current_row,
+            Constants.EMPTY_CHAR, 
+            Color.BLACK, 
+            Color.WHITE
+            );       
     }
 
 
@@ -149,38 +147,50 @@ public class WordleController extends Wordle {
      * @param event
      */
     private void handleEnterKey(KeyEvent event) {
-        Guess result = core.gradeAGuess(currentWord, correctWord);   
-        updateRowAfterGuess(result);    
-
-        // check if guess was correct
-        if(result.isCorrect) {
-            infoMsgLabel.setText("Congratulations, you won!"); 
-            gameOver = true;
-        }
-        // otherwise check if game was lost
-        else if (current_row == ROWS-1) {
-            infoMsgLabel.setText("Game over, you lost!"); 
-            gameOver = true;
-        }
-        else {
-            infoMsgLabel.setText("Try again!"); 
-        }
-
-        currentWord = "";
+        setEnterKeyPressed(true);
+        setCurrentWord("");
         current_col = 0;
         current_row++;
     }
 
+    public StringProperty currentWordProperty() {
+        return currentWord;
+    }
+
+    private String getCurrentWord() {
+        return currentWord.get();
+    }
+
+    public void setCurrentWord(String word) {
+        currentWord.set(word);
+    }
+
+    public BooleanProperty enterKeyPressedProperty() {
+        return enterKeyPressed;
+    }
+
+    public void setEnterKeyPressed(boolean value) {
+        enterKeyPressed.set(value);
+    }
+
+    public BooleanProperty newGameButtonPressedProperty() {
+        return newGameButtonPressed;
+    }
+
+    public void setNewGameButtonPressed(boolean value) {
+        newGameButtonPressed.set(value);
+    }
+
 
     /**
-     * Setup the game controls.
+     * Setup the game controls - start new game button, infomsglabel.
      */
     private void setupGameControls() {
         // A start button which restarts the game with a new word.
 
-        infoHBox = new HBox();
-        infoHBox.setPadding(new Insets(GAP));
-        infoHBox.setSpacing(GAP);
+        HBox infoHBox = new HBox();
+        infoHBox.setPadding(new Insets(Constants.GAP));
+        infoHBox.setSpacing(Constants.GAP);
         startNewGameButton = new Button("Start new game");   
         
         // prevent the button from being activated when pressing enter
@@ -195,10 +205,13 @@ public class WordleController extends Wordle {
         });
         // above might not be neccessary, but at least this helps!
         startNewGameButton.setFocusTraversable(false);
+        startNewGameButton.setId("newGameBtn");
+        startNewGameButton.setOnAction(event -> setNewGameButtonPressed(true));
        
 
         // A label which shows status messages like game won etc.
         infoMsgLabel = new Label("");
+        infoMsgLabel.setId("infoBox");
 
         infoHBox.getChildren().addAll(startNewGameButton, infoMsgLabel);
         root.getChildren().add(infoHBox);
@@ -210,9 +223,11 @@ public class WordleController extends Wordle {
      * Sets up the window size.
      */
     private void setupWindowSize() {
-        System.out.println("Setting up window size..");
-        int windowWidth = wordLength * TILE_SIZE + X_PADDING + (wordLength + 2 )* GAP;
-        int windowHeight = ROWS * TILE_SIZE + Y_PADDING + (ROWS + 1 )* GAP*2;
+        int windowWidth = correctWordLength * Constants.TILE_SIZE + 
+            Constants.X_PADDING + (correctWordLength + 2)* Constants.GAP;
+
+        int windowHeight = Constants.MAX_ROWS * Constants.TILE_SIZE + 
+            Constants.Y_PADDING + (Constants.MAX_ROWS + 1)* Constants.GAP * 2;
 
         System.out.println(windowWidth + "x" + windowHeight);
         scene.getWindow().setWidth(windowWidth);
@@ -221,11 +236,19 @@ public class WordleController extends Wordle {
 
 
     /**
-     * Sets up the window style.
+     * Sets up the window background color.
      */
     private void setupWindowStyle() {
-        System.out.println("Setting up window style..");
         scene.setFill(Color.rgb(200, 200, 200));;
+    }
+
+
+    /**
+     * Sets up the game info label.     *
+     * @param msg The message to be displayed.
+     */
+    public void setInfoMsgLabel(String msg) {
+        infoMsgLabel.setText(msg);
     }
 
 
@@ -234,9 +257,9 @@ public class WordleController extends Wordle {
      */
     private void setupLetterGrid() {
         letterGrid = new GridPane();
-        letterGrid.setPadding(new Insets(GAP));
-        letterGrid.setHgap(GAP);
-        letterGrid.setVgap(GAP);
+        letterGrid.setPadding(new Insets(Constants.GAP));
+        letterGrid.setHgap(Constants.GAP);
+        letterGrid.setVgap(Constants.GAP);
         root.getChildren().add(letterGrid);
 
         renderLetterBoxes();
@@ -249,10 +272,9 @@ public class WordleController extends Wordle {
      * LetterTile object was.
      * @param currentGuess
      */
-    private void updateRowAfterGuess(Guess currentGuess) {
-        ArrayList<GuessResult> result = currentGuess.getResult();
-        for (int i = 0; i < wordLength; i++) {
-            Character letter = currentWord.charAt(i);            
+    public void updateRowAfterGuess(ArrayList<GuessResult> result) {
+        for (int i = 0; i < correctWordLength; i++) {
+            Character letter = getCurrentWord().charAt(i);            
             if (result.get(i) == GuessResult.CORRECT) {
                 updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREEN);
             }
@@ -271,11 +293,17 @@ public class WordleController extends Wordle {
      * There are N rows total.
      */
     private void renderLetterBoxes() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < wordLength; col++) {
+        for (int row = 0; row < Constants.MAX_ROWS; row++) {
+            for (int col = 0; col < correctWordLength; col++) {
                 // put a letter only to the first row
                 try {
-                    LetterTile lt = new LetterTile(EMPTY_CHAR, col, row, TILE_SIZE);   
+                    LetterTile lt = new LetterTile(
+                        Constants.EMPTY_CHAR,
+                        col,
+                        row, 
+                        Constants.TILE_SIZE
+                        );   
+                    lt.setId(String.format("%d_%d", row, col));
                     letterGrid.add(lt.getLetterTile(), col, row);   
                 }
                 catch (Exception e) {
@@ -294,10 +322,16 @@ public class WordleController extends Wordle {
      * @param y the y coordinate
      * @param letter the new letter to be displayed      
      */
-    public void updateLetterTile(int x, int y, Character letter, Color charColor, Color color) {
+    public void updateLetterTile(
+        int x,
+        int y,
+        Character letter,
+        Color charColor, 
+        Color tileColor) 
+    {
         LetterTile lt = getLetterTileAt(x, y);
         lt.setLetter(letter, charColor);   
-        lt.setTileColor(color);
+        lt.setTileColor(tileColor);
     }
 
 
@@ -312,7 +346,10 @@ public class WordleController extends Wordle {
         for (Node node : letterGrid.getChildren()) {
             if (node instanceof LetterTile) {
                 LetterTile letterTile = (LetterTile) node;
-                if (GridPane.getColumnIndex(letterTile) == x && GridPane.getRowIndex(letterTile) == y) {
+
+                if (GridPane.getColumnIndex(letterTile) == x &&
+                    GridPane.getRowIndex(letterTile) == y)
+                {
                     return letterTile;
                 }
             }

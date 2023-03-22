@@ -20,27 +20,30 @@ public class Guess {
     private String guessedWord;
     private String correctWord;
 
-    int correctLetters = 0;
-    int misplacedLetters = 0;
-    int wrongLetters = 0;
-    boolean isCorrect = false;
+    private int correctLetters = 0;
+
+    private boolean isCorrect = false;
 
     private ArrayList<GuessResult> result;
 
 
+    /**
+     * Constructor for Guess, initializes an empty result list with the length 
+     * of the correct word. Each index holds one letter.
+     * @param guessedWord
+     * @param correctWord
+     */
     public Guess(String guessedWord, String correctWord) {
-        this.result = new ArrayList<GuessResult>(Collections.nCopies(guessedWord.length(), null));
+        this.result = new ArrayList<GuessResult>(Collections.nCopies(correctWord.length(), null));
+        System.out.println("word: " + guessedWord + " wordlen: " + guessedWord.length());
         this.guessedWord = guessedWord;        
         this.correctWord = correctWord;
     }
 
     public void gradeGuess() {
-        correctLetters = 0;
-        misplacedLetters = 0;
-        wrongLetters = 0;
     
         // Iterate through each character in the current word
-        for (int i = 0; i < guessedWord.length(); i++) {
+        for (int i = 0; i < correctWord.length(); i++) {
             char currentChar = guessedWord.charAt(i);
             char correctChar = correctWord.charAt(i);
     
@@ -52,12 +55,10 @@ public class Guess {
             // The current letter is in the correct word, but in the wrong position
             else if (correctWord.indexOf(currentChar) >= 0) {                
                 result.set(i, GuessResult.MISPLACED);
-                misplacedLetters++;
             } 
             // The current letter is completely wrong
             else {                
                 result.set(i, GuessResult.WRONG);
-                wrongLetters++;
             }
         }
 
