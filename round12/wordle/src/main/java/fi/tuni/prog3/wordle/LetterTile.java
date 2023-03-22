@@ -75,6 +75,19 @@ public class LetterTile extends Label {
         return this;
     }
 
+
+    /**
+     * Toggles tile highlight on/off
+     * @param state
+     */
+    public void higlightTile(boolean state) {
+        if (state) {
+            setStyle("-fx-border-color: red; -fx-border-width: 5px;");
+        } else {
+            setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        }
+    }
+
     /**
      * Initializes the graphics of the tile, 
      * a rectangle with a letter in the middle.
@@ -90,7 +103,7 @@ public class LetterTile extends Label {
         setText(letter.toUpperCase());
         setFont(Font.font(tileSize / 2));
         setTextFill(Constants.COLOR_TEXT_UNGRADED);
-        setStyle("-fx-border-color: black;");
+        setStyle("-fx-border-color: black; -fx-border-width: 1px;");
 
         setAlignment(Pos.CENTER);
         setLayoutX(Coords.x * tileSize);

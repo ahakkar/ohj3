@@ -15,7 +15,7 @@ public class Constants {
     public static final String WORDLE_FILE = "words.txt";
 
     // Empty LetterTile's string
-    public static final String EMPTY_STR = "";
+    public static final String EMPTY_STR = " ";
 
     // Tile styles and grid layout parameters
     public static final Integer X_PADDING = 20;

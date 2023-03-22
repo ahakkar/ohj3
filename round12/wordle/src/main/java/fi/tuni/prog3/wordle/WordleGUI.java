@@ -61,7 +61,8 @@ public class WordleGUI extends Pane {
         this.scene = scene; 
 
         this.correctWordLength = correctWordLength;
-        this.currentWord = new SimpleStringProperty("");     
+        // fill the string property with correctwordlength spaces    
+        this.currentWord = new SimpleStringProperty(" ".repeat(correctWordLength)); 
         this.enterKeyPressed = new SimpleBooleanProperty(false); 
         this.newGameButtonPressed = new SimpleBooleanProperty(false); 
         
@@ -70,6 +71,9 @@ public class WordleGUI extends Pane {
         setupLetterGrid(); 
         setupGameControls();  
         addKeyEventHandlers();  
+
+        // highlight the initial tile
+        getLetterTileAt(0, 0).higlightTile(true);
     }
 
 
@@ -86,26 +90,45 @@ public class WordleGUI extends Pane {
                 }
 
                 // System.out.println("Key pressed: " + event.getText() + " " + event.getCode());
-                if (event.getCode().isLetterKey()) {
-                    if (current_col < correctWordLength) {
-                        handleLetterKey(event);
-                    }                  
+                if (event.getCode().isLetterKey()) {                    
+                    handleLetterKey(event);                                      
                 }
-                // backspace & delete keys remove the last typed letter
-                else if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE) {
+                // backspace remvoes the selected letter and moves 1 letter to the left
+                else if (event.getCode() == KeyCode.BACK_SPACE) {
                     if (current_col > 0) {
-                        handleBackspacAndDeleteKeys(event);
-                    }                    
+                        handleBackspaceKey(event);
+                    }
+                } 
+                // delete key removes the selected letter and doesn't move
+                else if (event.getCode() == KeyCode.DELETE) {   
+                    handleDeleteKey(event);
+                                        
                 }
                 // enter grades the guess, colors the correct letters green and the incorrect letters orange
                 else if (event.getCode() == KeyCode.ENTER) {
-                    if (current_col == correctWordLength) {
+                    System.out.println(getCurrentWord() + " " + getCurrentWord().length());
+                    if (getCurrentWord().length() == correctWordLength) {
                         handleEnterKey(event);
                     } 
                     else {
                         infoMsgLabel.setText("Give a complete word before pressing Enter!");
                     }                                   
-                }  
+                }
+                // switch through tiles left and right with left/right arrow keys
+                else if (event.getCode() == KeyCode.LEFT) {
+                    if (current_col > 0) {
+                        getLetterTileAt(current_col, current_row).higlightTile(false);
+                        current_col--;
+                        getLetterTileAt(current_col, current_row).higlightTile(true);
+                    }                    
+                }
+                else if (event.getCode() == KeyCode.RIGHT) {
+                    if (current_col < correctWordLength - 1) {
+                        getLetterTileAt(current_col, current_row).higlightTile(false);
+                        current_col++;
+                        getLetterTileAt(current_col, current_row).higlightTile(true);
+                    }                    
+                }
             }
         });
     }
@@ -161,10 +184,28 @@ public class WordleGUI extends Pane {
      * When user presses backspace or delete keys, remove the last typed letter.
      * @param event
      */
-    private void handleBackspacAndDeleteKeys(KeyEvent event) {
-        // remove 1 char from end of current word
-        setCurrentWord(getCurrentWord().substring(0, getCurrentWord().length() - 1));
+    private void handleBackspaceKey(KeyEvent event) {
+        // replace 1 char from the current_col position of the string with Constants.EMPTY_STR
+        setCurrentWord(getCurrentWord().substring(0, current_col) + Constants.EMPTY_STR + getCurrentWord().substring(current_col + 1));
+
+        // de-higlight current tile and erase its letter
+        getLetterTileAt(current_col, current_row).higlightTile(false);
+        updateLetterTile(
+            current_col,
+            current_row,
+            Constants.EMPTY_STR, 
+            Constants.COLOR_TEXT_UNGRADED, 
+            Constants.COLOR_TILE_UNGRADED
+            );  
         current_col--;
+
+        // higlight the new selected tile
+        getLetterTileAt(current_col, current_row).higlightTile(true);     
+    }
+
+    private void handleDeleteKey(KeyEvent event) {
+        // replace 1 char from the current_col position of the string with Constants.EMPTY_STR
+        setCurrentWord(getCurrentWord().substring(0, current_col) + Constants.EMPTY_STR + getCurrentWord().substring(current_col + 1));
 
         updateLetterTile(
             current_col,
@@ -172,7 +213,7 @@ public class WordleGUI extends Pane {
             Constants.EMPTY_STR, 
             Constants.COLOR_TEXT_UNGRADED, 
             Constants.COLOR_TILE_UNGRADED
-            );       
+            );  
     }
 
 
@@ -183,9 +224,22 @@ public class WordleGUI extends Pane {
      */
     private void handleEnterKey(KeyEvent event) {
         setEnterKeyPressed(true);
-        setCurrentWord("");
+        setCurrentWord(" ".repeat(correctWordLength));
+
+        // de-highlight the old tile before switching rows
+        getLetterTileAt(current_col, current_row).higlightTile(false);
         current_col = 0;
         current_row++;
+
+        // highlight the first tile of the row
+        getLetterTileAt(0, current_row).higlightTile(true);
+    }
+
+    private static String replaceCharAtIndex(String input, String replacement, Integer index) {
+        if (index < 0 || index >= input.length()) {
+            throw new IllegalArgumentException("Index out of range: " + index + " for string: " + input); 
+        }
+        return input.substring(0, index) + replacement + input.substring(index + 1);
     }
 
 
@@ -195,8 +249,9 @@ public class WordleGUI extends Pane {
      */
     private void handleLetterKey(KeyEvent event) {
         String inputChar = event.getText();
+
         // add the typed letter to the current word
-        setCurrentWord(getCurrentWord() + inputChar.toLowerCase());
+        setCurrentWord(replaceCharAtIndex(getCurrentWord(), inputChar.toLowerCase(), current_col));
         updateLetterTile(
             current_col,
             current_row,
@@ -204,7 +259,20 @@ public class WordleGUI extends Pane {
             Constants.COLOR_TEXT_UNGRADED, 
             Constants.COLOR_TILE_UNGRADED
             );
-        current_col++;  
+
+        // if the current word has no empty spaces, do not move to next column
+        if (getCurrentWord().contains(Constants.EMPTY_STR)
+            && (current_col < correctWordLength - 1)) 
+            {
+            // de-higlight current tile and erase its letter
+            getLetterTileAt(current_col, current_row).higlightTile(false);
+            current_col++;
+
+            // higlight the new selected tile
+            getLetterTileAt(current_col, current_row).higlightTile(true);
+        }
+            
+ 
     }
 
 
@@ -389,6 +457,18 @@ public class WordleGUI extends Pane {
                     Constants.COLOR_TEXT_GRADED,
                     Constants.COLOR_TILE_CORRECT
                     );
+                // set next row's letter too if there is one to help the player
+                /*/
+                if (current_row < Constants.MAX_ROWS - 1) {
+                    updateLetterTile(
+                        col,
+                        current_row + 1,
+                        letter,
+                        Constants.COLOR_TEXT_GRADED,
+                        Constants.COLOR_TILE_CORRECT
+                        );
+                }
+                */
             }
             else if (result.get(col) == GuessResult.MISPLACED) {
                 updateLetterTile(

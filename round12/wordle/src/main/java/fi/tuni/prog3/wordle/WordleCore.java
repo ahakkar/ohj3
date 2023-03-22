@@ -154,6 +154,7 @@ public class WordleCore {
         attempts = 0; // reset guess attempts
         guesses = new ArrayList<Guess>(); // reset guesses
 
+        //correctWord = repo.getRandomWord();
         correctWord = repo.getNextWord();
         correctWordLength = correctWord.length();
 
