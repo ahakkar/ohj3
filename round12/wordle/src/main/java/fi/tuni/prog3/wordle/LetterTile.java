@@ -57,6 +57,7 @@ public class LetterTile extends Region {
         // Set the position of the text node
         text.setLayoutX(10);
         text.setLayoutY(40);
+        text.setId(String.format("%d_%d", Coords.y, Coords.x));
 
         this.getChildren().addAll(tile, text);
         this.setLayoutX(Coords.x * TILE_SIZE);

@@ -303,8 +303,7 @@ public class WordleGUI extends Pane {
                         col,
                         row, 
                         Constants.TILE_SIZE
-                        );   
-                    lt.setId(String.format("%d_%d", row, col));
+                        );                     
                     letterGrid.add(lt.getLetterTile(), col, row);   
                 }
                 catch (Exception e) {
