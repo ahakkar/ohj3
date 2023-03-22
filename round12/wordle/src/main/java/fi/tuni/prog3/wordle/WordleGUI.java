@@ -32,7 +32,7 @@ import javafx.beans.property.SimpleStringProperty;
 /**
  * WordleController class.
  */
-public class WordleGUI extends Wordle {
+public class WordleGUI extends Pane {
 
     private Scene scene;
     private Pane root;   
@@ -153,6 +153,7 @@ public class WordleGUI extends Wordle {
         current_row++;
     }
 
+
     public StringProperty currentWordProperty() {
         return currentWord;
     }
@@ -198,7 +199,7 @@ public class WordleGUI extends Wordle {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER) {
-                    System.out.println("perkele");
+                    //System.out.println("perkele");
                     event.consume();
                 }
             }
@@ -229,7 +230,7 @@ public class WordleGUI extends Wordle {
         int windowHeight = Constants.MAX_ROWS * Constants.TILE_SIZE + 
             Constants.Y_PADDING + (Constants.MAX_ROWS + 1)* Constants.GAP * 2;
 
-        System.out.println(windowWidth + "x" + windowHeight);
+        // System.out.println(windowWidth + "x" + windowHeight);
         scene.getWindow().setWidth(windowWidth);
         scene.getWindow().setHeight(windowHeight);
     }

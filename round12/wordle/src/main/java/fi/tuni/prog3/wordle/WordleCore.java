@@ -8,6 +8,8 @@ package fi.tuni.prog3.wordle;
  */
 
 import java.util.ArrayList;
+
+import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 
@@ -21,7 +23,7 @@ public class WordleCore {
 
     private Scene scene;
     private VBox root;
-    private WordleGUI GUI = null;
+    private WordleGUI currentGameInstance = null;
     private boolean gameOver = false;
 
     private Integer attempts = 0;
@@ -101,14 +103,30 @@ public class WordleCore {
 
         correctWord = repo.getNextWord();
         correctWordLength = correctWord.length();
-        GUI = new WordleGUI(root, scene, correctWordLength);
+
+        // Remove the old game instance from the root container
+        if (currentGameInstance != null) { 
+            //System.out.println("Removing old game instance...");          
+            if (root instanceof Pane) {
+                //System.out.println("Removing old game instance from Pane...");
+                ((Pane) root).getChildren().clear();
+                ((Pane) root).requestLayout(); // Force a layout pass              
+                //System.out.println(root.getChildren());
+            }
+        }
+
+        // create a new instance and add it to root
+        currentGameInstance = new WordleGUI(root, scene, correctWordLength);
+        if (root instanceof Pane) {
+            ((Pane) root).getChildren().add(currentGameInstance);
+        }
 
         setGameOver(false);
 
         // bind props so core knows when user does something in GUI
-        wc.bindToCurrentWord(GUI.currentWordProperty());
-        wc.bindToEnterKeyPressed(GUI.enterKeyPressedProperty());
-        wc.bindToNewGameButtonPressed(GUI.newGameButtonPressedProperty());
+        wc.bindToCurrentWord(currentGameInstance.currentWordProperty());
+        wc.bindToEnterKeyPressed(currentGameInstance.enterKeyPressedProperty());
+        wc.bindToNewGameButtonPressed(currentGameInstance.newGameButtonPressedProperty());
     }
 
 
@@ -138,20 +156,20 @@ public class WordleCore {
 
         Guess guess = new Guess(currentWord, correctWord);
         guess.gradeGuess();  
-        GUI.updateRowAfterGuess(guess.getResult());  
+        currentGameInstance.updateRowAfterGuess(guess.getResult());  
 
         // check if guess was correct
         if(guess.isCorrect()) {
-            GUI.setInfoMsgLabel("Congratulations, you won!"); 
+            currentGameInstance.setInfoMsgLabel("Congratulations, you won!"); 
             setGameOver(true);
         }
         // otherwise check if game was lost
         else if (attempts == Constants.MAX_ROWS) {
-            GUI.setInfoMsgLabel("Game over, you lost!"); 
+            currentGameInstance.setInfoMsgLabel("Game over, you lost!"); 
             setGameOver(true);
         }
         else {
-            GUI.setInfoMsgLabel("Try again!"); 
+            currentGameInstance.setInfoMsgLabel("Try again!"); 
         }
 
         guesses.add(guess);          
@@ -160,6 +178,6 @@ public class WordleCore {
 
     private void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
-        GUI.gameOver = gameOver;
+        currentGameInstance.gameOver = gameOver;
     }
 }
