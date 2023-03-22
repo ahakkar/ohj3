@@ -106,8 +106,8 @@ public class WordleGUI extends Pane {
                 }
                 // enter grades the guess, colors the correct letters green and the incorrect letters orange
                 else if (event.getCode() == KeyCode.ENTER) {
-                    System.out.println(getCurrentWord() + " " + getCurrentWord().length());
-                    if (getCurrentWord().length() == correctWordLength) {
+                    //System.out.println(getCurrentWord() + " " + getCurrentWord().length());
+                    if (!getCurrentWord().contains(Constants.EMPTY_STR)) {
                         handleEnterKey(event);
                     } 
                     else {
