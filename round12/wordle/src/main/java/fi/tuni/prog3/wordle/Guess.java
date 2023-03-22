@@ -35,7 +35,7 @@ public class Guess {
      */
     public Guess(String guessedWord, String correctWord) {
         this.result = new ArrayList<GuessResult>(Collections.nCopies(correctWord.length(), null));
-        System.out.println("word: " + guessedWord + " wordlen: " + guessedWord.length());
+        // System.out.println("word: " + guessedWord + " wordlen: " + guessedWord.length());
         this.guessedWord = guessedWord;        
         this.correctWord = correctWord;
     }

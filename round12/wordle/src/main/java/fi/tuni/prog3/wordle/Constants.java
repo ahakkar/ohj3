@@ -16,6 +16,6 @@ public class Constants {
     public static final Integer MAX_ROWS = 6;
     public static final Integer TILE_SIZE = 50;
     public static final Integer GAP = 10;
-    public static final Character EMPTY_CHAR = '\0';
+    public static final Character EMPTY_CHAR = ' ';
     
 }

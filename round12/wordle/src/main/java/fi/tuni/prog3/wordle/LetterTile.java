@@ -7,17 +7,20 @@ package fi.tuni.prog3.wordle;
  * antti.i.hakkarainen@tuni.fi 
  */
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.Region;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+
  
 /**
  * Custom JavaFX Node class representing a word tile. Each tile contains one letter.
  */
-public class LetterTile extends Region {
+public class LetterTile extends Label {
 
     private class Coordinates {
         private int x;
@@ -31,37 +34,41 @@ public class LetterTile extends Region {
 
     private Character letter;
     private Coordinates Coords;
-    private int TILE_SIZE;
-    private Rectangle tile;
-    private Text text;
+    private int tileSize;
 
-    public LetterTile(Character letter, int x, int y, int TILE_SIZE) {
+    public LetterTile(Character letter, int x, int y, int tileSize ) {
         this.letter = letter;
         this.Coords = new Coordinates(x, y);
-        this.TILE_SIZE = TILE_SIZE;
+        this.tileSize = tileSize;
         this.initGraphics();
     }
 
-    private void initGraphics() {
-        tile = new Rectangle(TILE_SIZE, TILE_SIZE);
-        tile.setFill(Color.WHITE);
-        tile.setStroke(Color.BLACK);
+    private void initGraphics() { 
+        // setup tile
+        setMinSize(tileSize, tileSize);
+        setMaxSize(tileSize, tileSize);
+        setPrefSize(tileSize, tileSize);
+        setBackground(
+            new Background(
+                new BackgroundFill(
+                    Color.WHITE, 
+                    CornerRadii.EMPTY,
+                    javafx.geometry.Insets.EMPTY
+                    )
+                )
+            );
 
-        text = new Text(Character.toString(letter).toUpperCase());
-        text.setFont(Font.font(TILE_SIZE / 1.2));
+        // setup text
+        setText(Character.toString(letter).toUpperCase());
+        setFont(Font.font(tileSize / 1.2));
+        setTextFill(Color.BLACK);
+        setStyle("-fx-border-color: black;");
 
+        setAlignment(Pos.CENTER);
+        setLayoutX(Coords.x * tileSize);
+        setLayoutY(Coords.y * tileSize);
 
-        // Set the text color to white
-        text.setFill(Color.BLACK);
-
-        // Set the position of the text node
-        text.setLayoutX(10);
-        text.setLayoutY(40);
-        text.setId(String.format("%d_%d", Coords.y, Coords.x));
-
-        this.getChildren().addAll(tile, text);
-        this.setLayoutX(Coords.x * TILE_SIZE);
-        this.setLayoutY(Coords.y * TILE_SIZE);
+        setId(String.format("%d_%d", Coords.y, Coords.x));
     }
 
     /**
@@ -102,14 +109,14 @@ public class LetterTile extends Region {
      */
     public void setLetter(Character letter, Color color) {
         this.letter = letter;
-        text.setText(Character.toString(letter).toUpperCase());
-        text.setFill(color);
+        setText(Character.toString(letter).toUpperCase());
+        setTextFill(color);
     }
 
     /**
      * Sets the color of the tile.
      */
     public void setTileColor(Color color) {
-        tile.setFill(color);
+        setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
     }    
 }
