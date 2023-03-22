@@ -84,15 +84,7 @@ public class LetterTile extends Label {
         setMinSize(tileSize, tileSize);
         setMaxSize(tileSize, tileSize);
         setPrefSize(tileSize, tileSize);
-        setBackground(
-            new Background(
-                new BackgroundFill(
-                    Constants.COLOR_TILE_UNGRADED, 
-                    CornerRadii.EMPTY,
-                    javafx.geometry.Insets.EMPTY
-                    )
-                )
-            );
+        setTileColor(Constants.COLOR_TILE_UNGRADED);
 
         // setup text
         setText(letter.toUpperCase());

@@ -321,7 +321,7 @@ public class WordleGUI extends Pane {
      */
     private void setupWindowSize() {
         int windowWidth = correctWordLength * Constants.TILE_SIZE + 
-            Constants.X_PADDING + (correctWordLength + 2)* Constants.GAP;
+            Constants.X_PADDING + (correctWordLength + 1)* Constants.GAP;
 
         int windowHeight = Constants.MAX_ROWS * Constants.TILE_SIZE + 
             Constants.Y_PADDING + (Constants.MAX_ROWS + 1)* Constants.GAP * 2;
