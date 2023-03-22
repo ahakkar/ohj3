@@ -26,7 +26,7 @@ public class Wordle extends Application {
         Scene scene = new Scene(root, 400, 300);
 
         stage.setScene(scene);
-        stage.setTitle("Wordle");
+        stage.setTitle("Wordle v. 1.0 by Antti Hakkarainen");
         stage.show();
 
         WordleCore wc = new WordleCore(root, scene);

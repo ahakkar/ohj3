@@ -78,6 +78,210 @@ public class WordleGUI extends Pane {
 
 
     /**
+     * Updates the row's box and text colors after user enters a guess.
+     * Boxes are colored based on how correct the letter in corresponding
+     * LetterTile object was.
+     * @param currentGuess
+     */
+    public void updateRowAfterGuess(ArrayList<GuessResult> result) {
+        for (int col = 0; col < correctWordLength; col++) {
+            String letter = (String) getCurrentWord().substring(col, col + 1);            
+            if (result.get(col) == GuessResult.CORRECT) {
+                updateLetterTile(
+                    col,
+                    current_row,
+                    letter,
+                    Constants.COLOR_TEXT_GRADED,
+                    Constants.COLOR_TILE_CORRECT
+                    );
+                // set next row's letter too if there is one to help the player
+                /*/
+                if (current_row < Constants.MAX_ROWS - 1) {
+                    updateLetterTile(
+                        col,
+                        current_row + 1,
+                        letter,
+                        Constants.COLOR_TEXT_GRADED,
+                        Constants.COLOR_TILE_CORRECT
+                        );
+                }
+                */
+            }
+            else if (result.get(col) == GuessResult.MISPLACED) {
+                updateLetterTile(
+                    col,
+                    current_row, 
+                    letter,
+                    Constants.COLOR_TEXT_GRADED, 
+                    Constants.COLOR_TILE_PARTIAL
+                    );
+            }
+            else if (result.get(col) == GuessResult.WRONG) {
+                updateLetterTile(
+                    col,
+                    current_row, 
+                    letter,
+                    Constants.COLOR_TEXT_GRADED,
+                    Constants.COLOR_TILE_WRONG
+                    );
+            }
+        }  
+    }
+
+
+    /**
+     * Sets the game info label.     
+     * @param msg The message to be displayed.
+     */
+    public void setInfoMsgLabel(String msg) {
+        infoMsgLabel.setText(msg);
+    }
+
+
+    /**
+     * Sets up the window size.
+     */
+    private void setupWindowSize() {
+        int windowWidth = correctWordLength * Constants.TILE_SIZE + 
+            Constants.X_PADDING + (correctWordLength + 1)* Constants.GAP;
+
+        int windowHeight = Constants.MAX_ROWS * Constants.TILE_SIZE + 
+            Constants.Y_PADDING + (Constants.MAX_ROWS + 1)* Constants.GAP * 2;
+
+        // System.out.println(windowWidth + "x" + windowHeight);
+        scene.getWindow().setWidth(windowWidth);
+        scene.getWindow().setHeight(windowHeight);
+    }
+
+    
+    /**
+     * Sets up the window background color.
+     */
+    private void setupWindowStyle() {
+        scene.setFill(Constants.COLOR_GAME_BACKGROUND);;
+    }
+
+
+    /**
+     * Sets up the letter grid, adds it to the scene.
+     */
+    private void setupLetterGrid() {
+        letterGrid = new GridPane();
+        letterGrid.setPadding(new Insets(Constants.GAP));
+        letterGrid.setHgap(Constants.GAP);
+        letterGrid.setVgap(Constants.GAP);
+        root.getChildren().add(letterGrid);
+
+        renderLetterBoxes();
+    }
+
+
+    /**
+     * Setup the game controls - start new game button, infomsglabel.
+     */
+    private void setupGameControls() {
+        // A start button which restarts the game with a new word.
+
+        HBox infoHBox = new HBox();
+        infoHBox.setPadding(new Insets(Constants.GAP));
+        infoHBox.setSpacing(Constants.GAP);
+        startNewGameButton = new Button("Start new game");   
+        
+        // prevent the button from being activated when user presses enter
+        startNewGameButton.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {           
+                    event.consume();
+                }
+            }
+        });
+        // above might not be neccessary, but at least this helps!
+        startNewGameButton.setFocusTraversable(false);
+        startNewGameButton.setId("newGameBtn");
+        startNewGameButton.setOnAction(event -> setNewGameButtonPressed(true));
+       
+
+        // A label which shows status messages like game won etc.
+        infoMsgLabel = new Label("");
+        infoMsgLabel.setId("infoBox");
+
+        infoHBox.getChildren().addAll(startNewGameButton, infoMsgLabel);
+        root.getChildren().add(infoHBox);
+
+    }  
+
+    
+    /**
+     * Renders wordLength boxes to a row, each box containing a letter from the word.
+     * There are N rows total.
+     */
+    private void renderLetterBoxes() {
+        for (int row = 0; row < Constants.MAX_ROWS; row++) {
+            for (int col = 0; col < correctWordLength; col++) {
+                // put a letter only to the first row
+                try {
+                    LetterTile lt = new LetterTile(
+                        Constants.EMPTY_STR,
+                        col,
+                        row, 
+                        Constants.TILE_SIZE
+                        );                     
+                    letterGrid.add(lt.getLetterTile(), col, row);   
+                }
+                catch (Exception e) {
+                    System.out.println("Exception while trying to add a LetterTile: " + e);
+                    e.printStackTrace();
+                    System.exit(1);
+                }   
+            }
+        }
+    }  
+
+
+    /**
+     * Find the LetterTile object at grid coordinates x, y
+     * @param gridPane the GridPane to search
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the LetterTile object at the given coordinates, or null if not found
+     */
+    private LetterTile getLetterTileAt(int x, int y) {    
+        for (Node node : letterGrid.getChildren()) {
+            if (node instanceof LetterTile) {
+                LetterTile letterTile = (LetterTile) node;
+
+                if (GridPane.getColumnIndex(letterTile) == x &&
+                    GridPane.getRowIndex(letterTile) == y)
+                {
+                    return letterTile;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Update a LetterTile at the given coordinates.
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param letter the new letter to be displayed      
+     */
+    private void updateLetterTile(
+        int x,
+        int y,
+        String letter,
+        Color charColor, 
+        Color tileColor) 
+    {
+        LetterTile lt = getLetterTileAt(x, y);
+        lt.setLetter(letter, charColor);   
+        lt.setTileColor(tileColor);
+    }   
+
+
+    /**
      * Add an event handler to the scene to listen for key events
      * and update the LetterTile objects accordingly.
      */
@@ -131,52 +335,6 @@ public class WordleGUI extends Pane {
                 }
             }
         });
-    }
-
-    /**
-     * @return the currentWordProperty.
-     */
-    public StringProperty currentWordProperty() {
-        return currentWord;
-    }
-
-    /**
-     * When user presses enter key, send info to WordleCore about it.
-     * @return
-     */
-    public BooleanProperty enterKeyPressedProperty() {
-        return enterKeyPressed;
-    }
-
-    /**
-     * Find the LetterTile object at grid coordinates x, y
-     * @param gridPane the GridPane to search
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @return the LetterTile object at the given coordinates, or null if not found
-     */
-    public LetterTile getLetterTileAt(int x, int y) {    
-        for (Node node : letterGrid.getChildren()) {
-            if (node instanceof LetterTile) {
-                LetterTile letterTile = (LetterTile) node;
-
-                if (GridPane.getColumnIndex(letterTile) == x &&
-                    GridPane.getRowIndex(letterTile) == y)
-                {
-                    return letterTile;
-                }
-            }
-        }
-        return null;
-    }
-
- 
-    /**
-     * 
-     * @return
-     */
-    private String getCurrentWord() {
-        return currentWord.get();
     }
 
 
@@ -235,13 +393,6 @@ public class WordleGUI extends Pane {
         getLetterTileAt(0, current_row).higlightTile(true);
     }
 
-    private static String replaceCharAtIndex(String input, String replacement, Integer index) {
-        if (index < 0 || index >= input.length()) {
-            throw new IllegalArgumentException("Index out of range: " + index + " for string: " + input); 
-        }
-        return input.substring(0, index) + replacement + input.substring(index + 1);
-    }
-
 
     /**
      * When use presses a letter key, add the letter to the current word.
@@ -277,6 +428,65 @@ public class WordleGUI extends Pane {
 
 
     /**
+     * Replaces a char at a given index in a string.
+     * @param input
+     * @param replacement
+     * @param index
+     * @return
+     */
+    private static String replaceCharAtIndex(String input, String replacement, Integer index) {
+        if (index < 0 || index >= input.length()) {
+            throw new IllegalArgumentException("Index out of range: " + index + " for string: " + input); 
+        }
+        return input.substring(0, index) + replacement + input.substring(index + 1);
+    }
+
+
+    /**
+     * @return the currentWordProperty.
+     */
+    public StringProperty currentWordProperty() {
+        return currentWord;
+    }
+
+
+    /**
+     * Sets the current word StringProperty.
+     * @param word
+     */
+    private void setCurrentWord(String word) {
+        currentWord.set(word);
+    }
+
+
+    /**
+     * 
+     * @return
+     */
+    private String getCurrentWord() {
+        return currentWord.get();
+    }
+
+
+    /**
+     * When user presses enter key, send info to WordleCore about it.
+     * @return
+     */
+    public BooleanProperty enterKeyPressedProperty() {
+        return enterKeyPressed;
+    }
+
+     
+    /**
+     * sets the enterKeyPressed Booleanproperty.
+     * @param value
+     */
+    private void setEnterKeyPressed(boolean value) {
+        enterKeyPressed.set(value);
+    }
+
+
+    /**
      * Sends info to Core that new game button was pressed.
      * @return
      */
@@ -285,209 +495,11 @@ public class WordleGUI extends Pane {
     }
 
 
-    /**
-     * Renders wordLength boxes to a row, each box containing a letter from the word.
-     * There are N rows total.
-     */
-    private void renderLetterBoxes() {
-        for (int row = 0; row < Constants.MAX_ROWS; row++) {
-            for (int col = 0; col < correctWordLength; col++) {
-                // put a letter only to the first row
-                try {
-                    LetterTile lt = new LetterTile(
-                        Constants.EMPTY_STR,
-                        col,
-                        row, 
-                        Constants.TILE_SIZE
-                        );                     
-                    letterGrid.add(lt.getLetterTile(), col, row);   
-                }
-                catch (Exception e) {
-                    System.out.println("Exception while trying to add a LetterTile: " + e);
-                    e.printStackTrace();
-                    System.exit(1);
-                }   
-            }
-        }
-    }  
-
-
-    /**
-     * Sets the current word StringProperty.
-     * @param word
-     */
-    public void setCurrentWord(String word) {
-        currentWord.set(word);
-    }
-
-
-    /**
-     * sets the enterKeyPressed Booleanproperty.
-     * @param value
-     */
-    public void setEnterKeyPressed(boolean value) {
-        enterKeyPressed.set(value);
-    }
-
-
-    /**
-     * Sets the game info label.     
-     * @param msg The message to be displayed.
-     */
-    public void setInfoMsgLabel(String msg) {
-        infoMsgLabel.setText(msg);
-    }
-
-
-    /**
+        /**
      * Sets the newGameButtonPressed BooleanProperty.
      * @param value
      */
-    public void setNewGameButtonPressed(boolean value) {
+    private void setNewGameButtonPressed(boolean value) {
         newGameButtonPressed.set(value);
-    }
-
-
-    /**
-     * Setup the game controls - start new game button, infomsglabel.
-     */
-    private void setupGameControls() {
-        // A start button which restarts the game with a new word.
-
-        HBox infoHBox = new HBox();
-        infoHBox.setPadding(new Insets(Constants.GAP));
-        infoHBox.setSpacing(Constants.GAP);
-        startNewGameButton = new Button("Start new game");   
-        
-        // prevent the button from being activated when user presses enter
-        startNewGameButton.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {           
-                    event.consume();
-                }
-            }
-        });
-        // above might not be neccessary, but at least this helps!
-        startNewGameButton.setFocusTraversable(false);
-        startNewGameButton.setId("newGameBtn");
-        startNewGameButton.setOnAction(event -> setNewGameButtonPressed(true));
-       
-
-        // A label which shows status messages like game won etc.
-        infoMsgLabel = new Label("");
-        infoMsgLabel.setId("infoBox");
-
-        infoHBox.getChildren().addAll(startNewGameButton, infoMsgLabel);
-        root.getChildren().add(infoHBox);
-
-    }
-      
-
-    /**
-     * Sets up the window size.
-     */
-    private void setupWindowSize() {
-        int windowWidth = correctWordLength * Constants.TILE_SIZE + 
-            Constants.X_PADDING + (correctWordLength + 1)* Constants.GAP;
-
-        int windowHeight = Constants.MAX_ROWS * Constants.TILE_SIZE + 
-            Constants.Y_PADDING + (Constants.MAX_ROWS + 1)* Constants.GAP * 2;
-
-        // System.out.println(windowWidth + "x" + windowHeight);
-        scene.getWindow().setWidth(windowWidth);
-        scene.getWindow().setHeight(windowHeight);
-    }
-
-
-    /**
-     * Sets up the window background color.
-     */
-    private void setupWindowStyle() {
-        scene.setFill(Constants.COLOR_GAME_BACKGROUND);;
-    }
-
-
-    /**
-     * Sets up the letter grid, adds it to the scene.
-     */
-    private void setupLetterGrid() {
-        letterGrid = new GridPane();
-        letterGrid.setPadding(new Insets(Constants.GAP));
-        letterGrid.setHgap(Constants.GAP);
-        letterGrid.setVgap(Constants.GAP);
-        root.getChildren().add(letterGrid);
-
-        renderLetterBoxes();
-    }
-
-    
-    /**
-     * Update a LetterTile at the given coordinates.
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param letter the new letter to be displayed      
-     */
-    public void updateLetterTile(
-        int x,
-        int y,
-        String letter,
-        Color charColor, 
-        Color tileColor) 
-    {
-        LetterTile lt = getLetterTileAt(x, y);
-        lt.setLetter(letter, charColor);   
-        lt.setTileColor(tileColor);
-    }
-
-    /**
-     * Updates the row's box and text colors after user enters a guess.
-     * Boxes are colored based on how correct the letter in corresponding
-     * LetterTile object was.
-     * @param currentGuess
-     */
-    public void updateRowAfterGuess(ArrayList<GuessResult> result) {
-        for (int col = 0; col < correctWordLength; col++) {
-            String letter = (String) getCurrentWord().substring(col, col + 1);            
-            if (result.get(col) == GuessResult.CORRECT) {
-                updateLetterTile(
-                    col,
-                    current_row,
-                    letter,
-                    Constants.COLOR_TEXT_GRADED,
-                    Constants.COLOR_TILE_CORRECT
-                    );
-                // set next row's letter too if there is one to help the player
-                /*/
-                if (current_row < Constants.MAX_ROWS - 1) {
-                    updateLetterTile(
-                        col,
-                        current_row + 1,
-                        letter,
-                        Constants.COLOR_TEXT_GRADED,
-                        Constants.COLOR_TILE_CORRECT
-                        );
-                }
-                */
-            }
-            else if (result.get(col) == GuessResult.MISPLACED) {
-                updateLetterTile(
-                    col,
-                    current_row, 
-                    letter,
-                    Constants.COLOR_TEXT_GRADED, 
-                    Constants.COLOR_TILE_PARTIAL
-                    );
-            }
-            else if (result.get(col) == GuessResult.WRONG) {
-                updateLetterTile(
-                    col,
-                    current_row, 
-                    letter,
-                    Constants.COLOR_TEXT_GRADED,
-                    Constants.COLOR_TILE_WRONG
-                    );
-            }
-        }  
     }
 }

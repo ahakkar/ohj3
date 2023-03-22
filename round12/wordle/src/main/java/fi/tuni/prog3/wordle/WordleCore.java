@@ -50,102 +50,6 @@ public class WordleCore {
 
 
     /**
-     * Binds the currentWordProperty to the currentWord variable.
-     * @param currentWordProperty the property to be bound
-     */
-    public void bindToCurrentWord(StringProperty currentWordProperty) {
-        currentWordProperty.addListener((obs, oldValue, newValue) -> {
-            currentWord = newValue;
-        });
-    }
-
-    /**
-     * Binds the enterKeyPressedProperty to the gradeAGuess method.
-     * @param enterKeyPressedProperty the property to be bound 
-     */
-    public void bindToEnterKeyPressed(BooleanProperty enterKeyPressedProperty) {
-        enterKeyPressedProperty.addListener((obs, oldValue, newValue) -> {
-            if (newValue) {
-                if (!gameOver) {
-                    this.checkAGuess();
-                }
-                enterKeyPressedProperty.set(false);
-            }
-        });
-    }
-
-    /**
-     * Binds the newGameButtonPressedProperty to the startNewGame method.
-     * @param newGameButtonPressedProperty the property to be bound
-     */
-    public void bindToNewGameButtonPressed(BooleanProperty newGameButtonPressedProperty) {
-        newGameButtonPressedProperty.addListener((obs, oldValue, newValue) -> {
-            if (newValue) {
-                startNewGame();
-                // newGameButtonPressedProperty.set(false);
-            }
-        });
-    }
-
-
-    /**
-     * Returns the correct word.
-     * @return String the correct word
-     */
-    public String getCorrectWord() {
-        return correctWord;
-    }
-
-
-    /**
-     * Returns the length of the correct word.
-     * @return Integer length of the correct word
-     */
-    public Integer getCorrectWordLength() {
-        return correctWordLength;
-    }
-
-
-    /**
-     * Check's the user's guess    
-     */
-    public void checkAGuess() {
-        attempts++;
-
-        Guess guess = new Guess(currentWord, correctWord);
-        guess.gradeGuess();  
-        currentGameInstance.updateRowAfterGuess(guess.getResult());  
-
-        // check if guess was correct
-        if(guess.isCorrect()) {
-            currentGameInstance.setInfoMsgLabel("Congratulations, you won!"); 
-            setGameOver(true);
-        }
-        // otherwise check if game was lost
-        else if (attempts == Constants.MAX_ROWS) {
-            currentGameInstance.setInfoMsgLabel("Game over, you lost!"); 
-            setGameOver(true);
-        }
-        else {
-            currentGameInstance.setInfoMsgLabel("Try again!"); 
-        }
-
-        guesses.add(guess);          
-
-    }    
-
-    public void setCoreInstance(WordleCore wc) {
-        this.wc = wc;
-    }
-
-
-    private void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-        currentGameInstance.gameOver = gameOver;
-    }
-
-
-    /**
      * Initially start a new game with the first word picked from list.
      * Starts a new game by picking the next word from the list. 
      * The GUI is also updated.     
@@ -181,5 +85,110 @@ public class WordleCore {
     }
 
 
+    /**
+     * Returns the correct word.
+     * @return String the correct word
+     */
+    public String getCorrectWord() {
+        return correctWord;
+    }
 
+
+    /**
+     * Returns the length of the correct word.
+     * @return Integer length of the correct word
+     */
+    public Integer getCorrectWordLength() {
+        return correctWordLength;
+    }
+
+
+    /**
+     * Sets the core instance to the current core instance so we can bind
+     * the properties of the current game instance to the core instance.
+     * @param wc
+     */
+    public void setCoreInstance(WordleCore wc) {
+        this.wc = wc;
+    }
+
+
+    /**
+     * Binds the currentWordProperty to the currentWord variable.
+     * @param currentWordProperty the property to be bound
+     */
+    public void bindToCurrentWord(StringProperty currentWordProperty) {
+        currentWordProperty.addListener((obs, oldValue, newValue) -> {
+            currentWord = newValue;
+        });
+    }
+
+
+    /**
+     * Binds the enterKeyPressedProperty to the gradeAGuess method.
+     * @param enterKeyPressedProperty the property to be bound 
+     */
+    public void bindToEnterKeyPressed(BooleanProperty enterKeyPressedProperty) {
+        enterKeyPressedProperty.addListener((obs, oldValue, newValue) -> {
+            if (newValue) {
+                if (!gameOver) {
+                    this.checkAGuess();
+                }
+                enterKeyPressedProperty.set(false);
+            }
+        });
+    }
+
+
+    /**
+     * Binds the newGameButtonPressedProperty to the startNewGame method.
+     * @param newGameButtonPressedProperty the property to be bound
+     */
+    public void bindToNewGameButtonPressed(BooleanProperty newGameButtonPressedProperty) {
+        newGameButtonPressedProperty.addListener((obs, oldValue, newValue) -> {
+            if (newValue) {
+                startNewGame();
+                // newGameButtonPressedProperty.set(false);
+            }
+        });
+    }
+
+
+    /**
+     * Check's the user's guess    
+     */
+    private void checkAGuess() {
+        attempts++;
+
+        Guess guess = new Guess(currentWord, correctWord);
+        guess.gradeGuess();  
+        currentGameInstance.updateRowAfterGuess(guess.getResult());  
+
+        // check if guess was correct
+        if(guess.isCorrect()) {
+            currentGameInstance.setInfoMsgLabel("Congratulations, you won!"); 
+            setGameOver(true);
+        }
+        // otherwise check if game was lost
+        else if (attempts == Constants.MAX_ROWS) {
+            currentGameInstance.setInfoMsgLabel("Game over, you lost!"); 
+            setGameOver(true);
+        }
+        else {
+            currentGameInstance.setInfoMsgLabel("Try again!"); 
+        }
+
+        guesses.add(guess);          
+
+    }    
+
+
+    /**
+     * Sets the gameOver variable and the gameOver variable in the current game instance.
+     * @param gameOver boolean value to set gameOver to
+     */
+    private void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+        currentGameInstance.gameOver = gameOver;
+    }
 }
