@@ -28,9 +28,10 @@ public class Constants {
     // colors
     public static final Color COLOR_GAME_BACKGROUND = Color.rgb(200, 200, 200);
     public static final Color COLOR_TILE_CORRECT = Color.GREEN;
-    public static final Color COLOR_TILE_PARTIAL = Color.ORANGE;
+    public static final Color COLOR_TILE_MISPLACED = Color.ORANGE;
     public static final Color COLOR_TILE_WRONG = Color.GREY;
     public static final Color COLOR_TILE_UNGRADED = Color.WHITE;
+    public static final Color COLOR_TILE_ERROR = Color.rgb(255,0,255);
 
     public static final Color COLOR_TEXT_UNGRADED = Color.BLACK;
     public static final Color COLOR_TEXT_GRADED = Color.WHITE;

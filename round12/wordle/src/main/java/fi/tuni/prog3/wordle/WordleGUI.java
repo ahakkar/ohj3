@@ -85,46 +85,26 @@ public class WordleGUI extends Pane {
      */
     public void updateRowAfterGuess(ArrayList<GuessResult> result) {
         for (int col = 0; col < correctWordLength; col++) {
-            String letter = (String) getCurrentWord().substring(col, col + 1);            
-            if (result.get(col) == GuessResult.CORRECT) {
-                updateLetterTile(
-                    col,
-                    current_row,
-                    letter,
-                    Constants.COLOR_TEXT_GRADED,
-                    Constants.COLOR_TILE_CORRECT
-                    );
-                // set next row's letter too if there is one to help the player
-                /*/
-                if (current_row < Constants.MAX_ROWS - 1) {
-                    updateLetterTile(
-                        col,
-                        current_row + 1,
-                        letter,
-                        Constants.COLOR_TEXT_GRADED,
-                        Constants.COLOR_TILE_CORRECT
-                        );
-                }
-                */
+            String letter = (String) getCurrentWord().substring(col, col + 1); 
+            Color tileColor; 
+
+            switch(result.get(col)) {
+                case CORRECT:
+                    tileColor = Constants.COLOR_TILE_CORRECT;
+                    break;
+                case MISPLACED:
+                    tileColor = Constants.COLOR_TILE_MISPLACED;
+                    break;
+                case WRONG:
+                    tileColor = Constants.COLOR_TILE_WRONG;
+                    break;
+                default:
+                    tileColor = Constants.COLOR_TILE_ERROR;
+                    break;
             }
-            else if (result.get(col) == GuessResult.MISPLACED) {
-                updateLetterTile(
-                    col,
-                    current_row, 
-                    letter,
-                    Constants.COLOR_TEXT_GRADED, 
-                    Constants.COLOR_TILE_PARTIAL
-                    );
-            }
-            else if (result.get(col) == GuessResult.WRONG) {
-                updateLetterTile(
-                    col,
-                    current_row, 
-                    letter,
-                    Constants.COLOR_TEXT_GRADED,
-                    Constants.COLOR_TILE_WRONG
-                    );
-            }
+
+            updateLetterTile(col, current_row, letter,
+                Constants.COLOR_TEXT_GRADED, tileColor);
         }  
     }
 
