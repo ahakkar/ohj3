@@ -43,34 +43,6 @@ public class LetterTile extends Label {
         this.initGraphics();
     }
 
-    private void initGraphics() { 
-        // setup tile
-        setMinSize(tileSize, tileSize);
-        setMaxSize(tileSize, tileSize);
-        setPrefSize(tileSize, tileSize);
-        setBackground(
-            new Background(
-                new BackgroundFill(
-                    Color.WHITE, 
-                    CornerRadii.EMPTY,
-                    javafx.geometry.Insets.EMPTY
-                    )
-                )
-            );
-
-        // setup text
-        setText(letter.toUpperCase());
-        setFont(Font.font(tileSize / 2));
-        setTextFill(Color.BLACK);
-        setStyle("-fx-border-color: black;");
-
-        setAlignment(Pos.CENTER);
-        setLayoutX(Coords.x * tileSize);
-        setLayoutY(Coords.y * tileSize);
-
-        setId(String.format("%d_%d", Coords.y, Coords.x));
-    }
-
     /**
      * Returns the x coordinate of the tile.
      * @return int x
@@ -104,6 +76,39 @@ public class LetterTile extends Label {
     }
 
     /**
+     * Initializes the graphics of the tile, 
+     * a rectangle with a letter in the middle.
+     */
+    private void initGraphics() { 
+        // setup tile
+        setMinSize(tileSize, tileSize);
+        setMaxSize(tileSize, tileSize);
+        setPrefSize(tileSize, tileSize);
+        setBackground(
+            new Background(
+                new BackgroundFill(
+                    Constants.COLOR_TILE_UNGRADED, 
+                    CornerRadii.EMPTY,
+                    javafx.geometry.Insets.EMPTY
+                    )
+                )
+            );
+
+        // setup text
+        setText(letter.toUpperCase());
+        setFont(Font.font(tileSize / 2));
+        setTextFill(Constants.COLOR_TEXT_UNGRADED);
+        setStyle("-fx-border-color: black;");
+
+        setAlignment(Pos.CENTER);
+        setLayoutX(Coords.x * tileSize);
+        setLayoutY(Coords.y * tileSize);
+
+        setId(String.format("%d_%d", Coords.y, Coords.x));
+    }
+
+
+    /**
      * Sets the text of the tile.
      * @param letter Character
      */
@@ -117,6 +122,14 @@ public class LetterTile extends Label {
      * Sets the color of the tile.
      */
     public void setTileColor(Color color) {
-        setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
+        setBackground(
+            new Background(
+                new BackgroundFill(
+                    color,
+                    CornerRadii.EMPTY,
+                    javafx.geometry.Insets.EMPTY
+                    )
+                )
+            );
     }    
 }

@@ -30,11 +30,11 @@ public class WordleCore {
     private String currentWord = "";
     private Integer correctWordLength = -1;
     private String correctWord = "";
+
+
     private WordRepository repo;
-
-    private WordleCore wc;    
-
-    private ArrayList<Guess> guesses;
+    private WordleCore wc;  
+    private ArrayList<Guess> guesses; // actually these are not used for anything
 
 
     /**
@@ -87,46 +87,13 @@ public class WordleCore {
         });
     }
 
-    public void setCoreInstance(WordleCore wc) {
-        this.wc = wc;
-    }
-
 
     /**
-     * Initially start a new game with the first word picked from list.
-     * Starts a new game by picking the next word from the list. 
-     * The GUI is also updated.     
+     * Returns the correct word.
+     * @return String the correct word
      */
-    public void startNewGame() {
-        attempts = 0; // reset guess attempts
-        guesses = new ArrayList<Guess>(); // reset guesses
-
-        correctWord = repo.getNextWord();
-        correctWordLength = correctWord.length();
-
-        // Remove the old game instance from the root container
-        if (currentGameInstance != null) { 
-            //System.out.println("Removing old game instance...");          
-            if (root instanceof Pane) {
-                //System.out.println("Removing old game instance from Pane...");
-                ((Pane) root).getChildren().clear();
-                ((Pane) root).requestLayout(); // Force a layout pass              
-                //System.out.println(root.getChildren());
-            }
-        }
-
-        // create a new instance and add it to root
-        currentGameInstance = new WordleGUI(root, scene, correctWordLength);
-        if (root instanceof Pane) {
-            ((Pane) root).getChildren().add(currentGameInstance);
-        }
-
-        setGameOver(false);
-
-        // bind props so core knows when user does something in GUI
-        wc.bindToCurrentWord(currentGameInstance.currentWordProperty());
-        wc.bindToEnterKeyPressed(currentGameInstance.enterKeyPressedProperty());
-        wc.bindToNewGameButtonPressed(currentGameInstance.newGameButtonPressedProperty());
+    public String getCorrectWord() {
+        return correctWord;
     }
 
 
@@ -136,15 +103,6 @@ public class WordleCore {
      */
     public Integer getCorrectWordLength() {
         return correctWordLength;
-    }
-
-
-    /**
-     * Returns the correct word.
-     * @return String the correct word
-     */
-    public String getCorrectWord() {
-        return correctWord;
     }
 
 
@@ -176,8 +134,51 @@ public class WordleCore {
 
     }    
 
+    public void setCoreInstance(WordleCore wc) {
+        this.wc = wc;
+    }
+
+
     private void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
         currentGameInstance.gameOver = gameOver;
     }
+
+
+    /**
+     * Initially start a new game with the first word picked from list.
+     * Starts a new game by picking the next word from the list. 
+     * The GUI is also updated.     
+     */
+    public void startNewGame() {
+        attempts = 0; // reset guess attempts
+        guesses = new ArrayList<Guess>(); // reset guesses
+
+        correctWord = repo.getNextWord();
+        correctWordLength = correctWord.length();
+
+        // Remove the old game instance from the root container
+        if (currentGameInstance != null) {    
+            if (root instanceof Pane) {
+                ((Pane) root).getChildren().clear();
+                ((Pane) root).requestLayout(); // Force a layout pass  
+            }
+        }
+
+        // create a new instance and add it to root
+        currentGameInstance = new WordleGUI(root, scene, correctWordLength);
+        if (root instanceof Pane) {
+            ((Pane) root).getChildren().add(currentGameInstance);
+        }
+
+        setGameOver(false);
+
+        // bind props so core knows when user does something in GUI
+        wc.bindToCurrentWord(currentGameInstance.currentWordProperty());
+        wc.bindToEnterKeyPressed(currentGameInstance.enterKeyPressedProperty());
+        wc.bindToNewGameButtonPressed(currentGameInstance.newGameButtonPressedProperty());
+    }
+
+
+
 }

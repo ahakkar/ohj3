@@ -17,13 +17,9 @@ public class Guess {
 
     private String guessedWord;
     private String correctWord;
-
     private int correctLetters = 0;
-
     private boolean isCorrect = false;
-
     private ArrayList<GuessResult> result;
-
 
     /**
      * Constructor for Guess, initializes an empty result list with the length 
@@ -33,11 +29,25 @@ public class Guess {
      */
     public Guess(String guessedWord, String correctWord) {
         this.result = new ArrayList<GuessResult>(Collections.nCopies(correctWord.length(), null));
-        // System.out.println("word: " + guessedWord + " wordlen: " + guessedWord.length());
         this.guessedWord = guessedWord;        
         this.correctWord = correctWord;
     }
+   
 
+    /**
+     * Returns the result of the guess
+     * @return ArrayList<GuessResult> result
+     */
+    public ArrayList<GuessResult> getResult() {
+        return result;
+    }
+
+
+    /**
+     * Grades the guess and fills the result list with the results.
+     * Also sets the isCorrect variable to true if the guess was 100% correct.
+     * Each letter is graded to be wrong, correct or misplaced.
+     */
     public void gradeGuess() {
     
         // Iterate through each character in the current word
@@ -63,12 +73,13 @@ public class Guess {
         if (correctLetters == correctWord.length()) {
             isCorrect = true;
         }
-    }    
+    } 
 
-    public ArrayList<GuessResult> getResult() {
-        return result;
-    }
 
+    /**
+     * Returns if the guess was correct or incorrect
+     * @return boolean
+     */
     public boolean isCorrect() {
         return isCorrect;
     }

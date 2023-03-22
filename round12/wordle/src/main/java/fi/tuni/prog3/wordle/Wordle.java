@@ -14,7 +14,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.layout.VBox;
 
-public class Wordle extends Application {
+public class Wordle extends Application {    
+    public static void main(String[] args) {
+        launch();
+    }
 
     // @SuppressWarnings("exports") 
     @Override
@@ -30,10 +33,4 @@ public class Wordle extends Application {
         wc.setCoreInstance(wc);
         wc.startNewGame();
     }
-
-
-    public static void main(String[] args) {
-        launch();
-    }
-
 }

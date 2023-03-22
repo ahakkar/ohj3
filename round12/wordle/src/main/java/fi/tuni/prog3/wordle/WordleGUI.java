@@ -30,7 +30,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
- * WordleController class.
+ * Wordle's GUI class. A new instance is created for each new game.
  */
 public class WordleGUI extends Pane {
 
@@ -50,7 +50,9 @@ public class WordleGUI extends Pane {
     private BooleanProperty newGameButtonPressed;
     
     /**
-     * Constructor.
+     * Constructor. Creates a new WordleGUI instance, setups the game 
+     * window and adds event handlers so the GUI can communicate with Core
+     * about user input.
      * @param root The root pane.
      * @param scene The scene.
      */
@@ -146,7 +148,10 @@ public class WordleGUI extends Pane {
     }
 
  
-
+    /**
+     * 
+     * @return
+     */
     private String getCurrentWord() {
         return currentWord.get();
     }
@@ -165,8 +170,8 @@ public class WordleGUI extends Pane {
             current_col,
             current_row,
             Constants.EMPTY_STR, 
-            Color.BLACK, 
-            Color.WHITE
+            Constants.COLOR_TEXT_UNGRADED, 
+            Constants.COLOR_TILE_UNGRADED
             );       
     }
 
@@ -192,7 +197,13 @@ public class WordleGUI extends Pane {
         String inputChar = event.getText();
         // add the typed letter to the current word
         setCurrentWord(getCurrentWord() + inputChar.toLowerCase());
-        updateLetterTile(current_col, current_row, inputChar, Color.BLACK, Color.WHITE);
+        updateLetterTile(
+            current_col,
+            current_row,
+            inputChar,
+            Constants.COLOR_TEXT_UNGRADED, 
+            Constants.COLOR_TILE_UNGRADED
+            );
         current_col++;  
     }
 
@@ -232,12 +243,9 @@ public class WordleGUI extends Pane {
         }
     }  
 
-    
-
-
 
     /**
-     * 
+     * Sets the current word StringProperty.
      * @param word
      */
     public void setCurrentWord(String word) {
@@ -246,7 +254,7 @@ public class WordleGUI extends Pane {
 
 
     /**
-     * 
+     * sets the enterKeyPressed Booleanproperty.
      * @param value
      */
     public void setEnterKeyPressed(boolean value) {
@@ -255,13 +263,18 @@ public class WordleGUI extends Pane {
 
 
     /**
-     * Sets up the game info label.     *
+     * Sets the game info label.     
      * @param msg The message to be displayed.
      */
     public void setInfoMsgLabel(String msg) {
         infoMsgLabel.setText(msg);
     }
 
+
+    /**
+     * Sets the newGameButtonPressed BooleanProperty.
+     * @param value
+     */
     public void setNewGameButtonPressed(boolean value) {
         newGameButtonPressed.set(value);
     }
@@ -278,12 +291,11 @@ public class WordleGUI extends Pane {
         infoHBox.setSpacing(Constants.GAP);
         startNewGameButton = new Button("Start new game");   
         
-        // prevent the button from being activated when pressing enter
+        // prevent the button from being activated when user presses enter
         startNewGameButton.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    //System.out.println("perkele");
+                if (event.getCode() == KeyCode.ENTER) {           
                     event.consume();
                 }
             }
@@ -324,7 +336,7 @@ public class WordleGUI extends Pane {
      * Sets up the window background color.
      */
     private void setupWindowStyle() {
-        scene.setFill(Color.rgb(200, 200, 200));;
+        scene.setFill(Constants.COLOR_GAME_BACKGROUND);;
     }
 
 
@@ -367,16 +379,34 @@ public class WordleGUI extends Pane {
      * @param currentGuess
      */
     public void updateRowAfterGuess(ArrayList<GuessResult> result) {
-        for (int i = 0; i < correctWordLength; i++) {
-            String letter = (String) getCurrentWord().substring(i, i + 1);            
-            if (result.get(i) == GuessResult.CORRECT) {
-                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREEN);
+        for (int col = 0; col < correctWordLength; col++) {
+            String letter = (String) getCurrentWord().substring(col, col + 1);            
+            if (result.get(col) == GuessResult.CORRECT) {
+                updateLetterTile(
+                    col,
+                    current_row,
+                    letter,
+                    Constants.COLOR_TEXT_GRADED,
+                    Constants.COLOR_TILE_CORRECT
+                    );
             }
-            else if (result.get(i) == GuessResult.MISPLACED) {
-                updateLetterTile(i, current_row, letter, Color.WHITE, Color.ORANGE);
+            else if (result.get(col) == GuessResult.MISPLACED) {
+                updateLetterTile(
+                    col,
+                    current_row, 
+                    letter,
+                    Constants.COLOR_TEXT_GRADED, 
+                    Constants.COLOR_TILE_PARTIAL
+                    );
             }
-            else if (result.get(i) == GuessResult.WRONG) {
-                updateLetterTile(i, current_row, letter, Color.WHITE, Color.GREY);
+            else if (result.get(col) == GuessResult.WRONG) {
+                updateLetterTile(
+                    col,
+                    current_row, 
+                    letter,
+                    Constants.COLOR_TEXT_GRADED,
+                    Constants.COLOR_TILE_WRONG
+                    );
             }
         }  
     }
