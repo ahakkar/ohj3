@@ -10,8 +10,6 @@ package fi.tuni.prog3.wordle;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import fi.tuni.prog3.wordle.GuessResult;
-
 /**
  * Grades a guess and contains the results
  */

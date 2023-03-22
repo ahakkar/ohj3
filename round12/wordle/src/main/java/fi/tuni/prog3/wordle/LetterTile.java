@@ -32,11 +32,11 @@ public class LetterTile extends Label {
         }
     }
 
-    private Character letter;
+    private String letter;
     private Coordinates Coords;
     private int tileSize;
 
-    public LetterTile(Character letter, int x, int y, int tileSize ) {
+    public LetterTile(String letter, int x, int y, int tileSize ) {
         this.letter = letter;
         this.Coords = new Coordinates(x, y);
         this.tileSize = tileSize;
@@ -59,8 +59,8 @@ public class LetterTile extends Label {
             );
 
         // setup text
-        setText(Character.toString(letter).toUpperCase());
-        setFont(Font.font(tileSize / 1.2));
+        setText(letter.toUpperCase());
+        setFont(Font.font(tileSize / 2));
         setTextFill(Color.BLACK);
         setStyle("-fx-border-color: black;");
 
@@ -91,7 +91,7 @@ public class LetterTile extends Label {
      * Returns the letter of the tile.
      * @return Character letter
      */
-    public Character getLetter() {
+    public String getLetter() {
         return letter;
     }
 
@@ -107,9 +107,9 @@ public class LetterTile extends Label {
      * Sets the text of the tile.
      * @param letter Character
      */
-    public void setLetter(Character letter, Color color) {
+    public void setLetter(String letter, Color color) {
         this.letter = letter;
-        setText(Character.toString(letter).toUpperCase());
+        setText(letter.toUpperCase());
         setTextFill(color);
     }
 
