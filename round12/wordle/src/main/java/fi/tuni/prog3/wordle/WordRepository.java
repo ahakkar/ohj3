@@ -23,7 +23,7 @@ public class WordRepository {
      * @param wordleFile String name of the file to be read
      */
     public WordRepository(String wordleFile) {
-        this.readFile(wordleFile);
+        this.readFileFromRoot(wordleFile);
 
     }
 
@@ -58,10 +58,26 @@ public class WordRepository {
 
     /**
      * Reads a .txt file and adds the words to the arraylist
-     */
+     *
     private void readFile(String wordleFile) {  
         URL url = Wordle.class.getResource(wordleFile);
         try (BufferedReader br = new BufferedReader(new FileReader(url.getPath()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                words.add(line.trim());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
+    }  
+    */
+    
+    
+   /**
+     * Reads a .txt file and adds the words to the arraylist
+     */
+    private void readFileFromRoot(String wordleFile) {  
+        try (BufferedReader br = new BufferedReader(new FileReader(wordleFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 words.add(line.trim());
